@@ -39,7 +39,7 @@ form {
 }
 
 label {
-  text-align: center;
+  /* text-align: center; */
   font-size: 30px;
   color: honeydew;
   text-shadow: gray 2px 2px 2px;
@@ -84,4 +84,21 @@ input {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.scheduleContent {
+  border: solid gray 3px;
+  background-color: lightgray;
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  margin: 0 auto;
+  /* border-radius: 5%; */
+  padding: 5px 10px;
+  justify-content: center;
+  align-items: center;
+}
+p {
+  color: #114161;
+  font-size: 20px;
 }
