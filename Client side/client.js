@@ -10,6 +10,22 @@ const scheduleContent = document.querySelector(".scheduleContent");
 cover.style.display = "none";
 scheduleContent.style.display = "none";
 
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "October",
+  "September",
+  "November",
+  "December",
+];
+
+const todaysDate = new Date();
 function ifLoginSuccess(resp) {
   form.reset();
 
@@ -28,9 +44,9 @@ function ifLoginSuccess(resp) {
     const inside =
       `
     <div>
-    <div style="display: flex; justify-content: space-between;">
-      <form class="yourFreeTime">
-        <label style="color: #114161;" for="freeTime"
+    <div style="display: flex; justify-content: space-between; align-items: top;">
+      <form class="yourFreeTime" style="width: 30%;">
+        <label style="color: #114161; font-size: 20px;" for="freeTime"
           >Pick the date and time that you're willing to sacrifice for meeting
           up with friends</label
         >
@@ -44,7 +60,7 @@ function ifLoginSuccess(resp) {
         <button
           class="freeTimeButton"
           style="
-            font-size: 30px;
+            font-size: 20px;
             background-color: #114161;
             text-transform: uppercase;
             font-weight: bold;
@@ -55,13 +71,24 @@ function ifLoginSuccess(resp) {
           Sacrifice
         </button>
       </form>
-      <p>` +
+      <div>
+        <div style="display: flex; justify-content: space-between; height: 30px;">
+        <button>Previous</button>
+        <h2 style="margin: auto 0; color: #114161;">
+          ` +
+      months[todaysDate.getMonth()] +
+      `
+        </h2>
+        <button>Next</button>
+        </div>
+        <p>` +
       info +
       `</p>
+      </div>
       <img
         src="https://www.animalsheltering.org/sites/default/files/styles/article/public/images/hero/201501WhatsThatBug1.jpg"
-        width="400"
-        height="300"
+        width="300"
+        height="200"
       />
     </div>
     </div>

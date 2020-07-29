@@ -13,6 +13,7 @@ function hash(word) {
 
 const db = monk("localhost:27017/firstWebService");
 const users = db.get("users");
+const dates = db.get("dates");
 
 app.use(cors());
 app.use(express.json());
