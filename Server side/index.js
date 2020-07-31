@@ -28,23 +28,32 @@ app.post("/checkuser", (req, res) => {
   console.log(req.body);
   const x = req.body.login;
   console.log(typeof x);
-  users.find({ login: x }).then((result) => {
-    console.log(result[0].password);
-    console.log(req.body.password);
-    if (result[0].password === req.body.password) {
-      console.log("mam takiego");
-      res.json({
-        state: true,
-        msg: "In the future there will be a list of dates",
-      });
-    } else {
-      console.log("nie mam");
+  users
+    .find({ login: x })
+    .then((result) => {
+      console.log(result[0].password);
+      console.log(req.body.password);
+      if (result[0].password === req.body.password) {
+        console.log("mam takiego");
+        res.json({
+          state: true,
+          msg: "In the future there will be a list of dates",
+        });
+      } else {
+        console.log("nie mam (haslo)");
+        res.json({
+          state: false,
+          msg: "Password is invalid",
+        });
+      }
+    })
+    .catch((error) => {
+      console.log("nie mam (haslo)");
       res.json({
         state: false,
-        msg: "Password is invalid or given user doesn't exist",
+        msg: "Given user doesn't exist",
       });
-    }
-  });
+    });
 });
 
 app.listen(8000, () => {

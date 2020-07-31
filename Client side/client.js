@@ -1,7 +1,10 @@
 // const { response } = require("express");
 
 console.log("Jestem tu");
-const API_URL_checkuser = "http://localhost:8000/checkuser";
+const API_URL_checkuser =
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:8000/checkuser"
+    : "http://161.35.207.19:8000/checkuser";
 
 const form = document.querySelector("form");
 const cover = document.querySelector(".cover");
