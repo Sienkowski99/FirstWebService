@@ -6,6 +6,11 @@ const API_URL_checkuser =
     ? "http://localhost:8000/checkuser"
     : "http://161.35.207.19:8000/checkuser";
 
+const API_URL_getCalendar =
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:8000/getCurrentMonthWithDates"
+    : "http://161.35.207.19:8000/getCurrentMonthWithDates";
+
 const form = document.querySelector("form");
 const cover = document.querySelector(".cover");
 const scheduleContent = document.querySelector(".scheduleContent");
@@ -28,6 +33,22 @@ const months = [
   "December",
 ];
 
+function getCalendar() {
+  fetch(API_URL_getCalendar, {
+    method: "GET",
+    // body: JSON.stringify({ date: todaysDate.getDay() }),
+    headers: {
+      "content-type": "application/json",
+    },
+  })
+    .then((x) => x.json())
+    .then((x) => {
+      return x.msg;
+    });
+}
+const name = {
+  name: "August",
+};
 const todaysDate = new Date();
 function ifLoginSuccess(resp) {
   form.reset();
@@ -42,7 +63,9 @@ function ifLoginSuccess(resp) {
     // dates.textContent = resp.msg;
     // console.log(resp.msg);
     // div.appendChild(dates);
-    const info = resp.msg;
+
+    // const info = resp.msg;
+    const info = getCalendar();
     const main = document.createElement("div");
     const inside =
       `

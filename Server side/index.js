@@ -10,6 +10,9 @@ function hash(word) {
   console.log(sha256(word));
   return sha256(word);
 }
+function msc() {
+  console.log("dodaje msce");
+}
 
 const db = monk("localhost:27017/firstWebService");
 const users = db.get("users");
@@ -20,6 +23,16 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Dynamic server of 'Firends schedule'");
+});
+
+app.get("/admin", (req, res) => {
+  res.send("Admin panel will be added in the future.'");
+});
+
+app.get("/getCurrentMonthWithDates", (req, res) => {
+  res.json({
+    msg: "BLABLA",
+  });
 });
 
 app.post("/checkuser", (req, res) => {
