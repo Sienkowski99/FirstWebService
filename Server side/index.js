@@ -10,13 +10,90 @@ function hash(word) {
   console.log(sha256(word));
   return sha256(word);
 }
-function msc() {
-  console.log("dodaje msce");
+
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "October",
+  "September",
+  "November",
+  "December",
+];
+
+function msc(res) {
+  const date = new Date();
+  console.log(date.getDate());
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  console.log(months[month] + " " + year);
+  let x = "";
+  dates
+    .find({ year: year, month: month })
+    .then((found) => {
+      console.log(found[0].days[date.getDate() - 1]);
+      console.log(found[0].days);
+      found[0].days.forEach((element) => {
+        console.log(element);
+        console.log(element.day.availablePeople);
+        x =
+          x +
+          `\n<div>
+        <h4>` +
+          element.day +
+          `</h4>
+        <h7>List of friends willing to meet</h7>
+        <ul>
+          <li>` +
+          element.day.availablePeople +
+          `</li>
+        </ul>
+        </div>`;
+      });
+    })
+    .then((nic) => {
+      console.log(x);
+      let html = {
+        title: months[month] + " " + year,
+        days: x,
+      };
+      console.log(html.days);
+      // return html;
+      return res.json({
+        state: true,
+        msg: "In the future there will be a list of dates",
+        content: html,
+      });
+    });
 }
 
 const db = monk("localhost:27017/firstWebService");
 const users = db.get("users");
 const dates = db.get("dates");
+
+function dbUpdate() {
+  let lista = [];
+  for (let i = 0; i < 31; i++) {
+    lista.push({
+      day: i + 1,
+      availablePeople: [],
+    });
+  }
+  k = {
+    year: 2020,
+    month: 7,
+    days: lista,
+  };
+  console.log(k);
+  dates.insert(k);
+}
+// dbUpdate();
+dbUpdate();
 
 app.use(cors());
 app.use(express.json());
@@ -48,10 +125,7 @@ app.post("/checkuser", (req, res) => {
       console.log(req.body.password);
       if (result[0].password === req.body.password) {
         console.log("mam takiego");
-        res.json({
-          state: true,
-          msg: "In the future there will be a list of dates",
-        });
+        msc(res);
       } else {
         console.log("nie mam (haslo)");
         res.json({

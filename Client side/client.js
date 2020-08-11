@@ -43,12 +43,11 @@ function getCalendar() {
   })
     .then((x) => x.json())
     .then((x) => {
-      return x.msg;
+      console.log(x);
+      x.msg;
     });
 }
-const name = {
-  name: "August",
-};
+
 const todaysDate = new Date();
 function ifLoginSuccess(resp) {
   form.reset();
@@ -65,7 +64,8 @@ function ifLoginSuccess(resp) {
     // div.appendChild(dates);
 
     // const info = resp.msg;
-    const info = getCalendar();
+    // const info = getCalendar();
+    const info = resp.content.days;
     const main = document.createElement("div");
     const inside =
       `
@@ -102,15 +102,14 @@ function ifLoginSuccess(resp) {
         <button>Previous</button>
         <h2 style="margin: auto 0; color: #114161;">
           ` +
-      months[todaysDate.getMonth()] +
+      // months[todaysDate.getMonth()]
+      resp.content.title +
       `
         </h2>
         <button>Next</button>
-        </div>
-        <p>` +
+        </div>` +
       info +
-      `</p>
-      </div>
+      `</div>
       <img
         src="https://www.animalsheltering.org/sites/default/files/styles/article/public/images/hero/201501WhatsThatBug1.jpg"
         width="300"
