@@ -93,8 +93,13 @@ function dbUpdate() {
   dates.insert(k);
 }
 // dbUpdate();
-dbUpdate();
-
+function dbInsertUserUpdate() {
+  dates.update(
+    { month: 7, "days.day": 12 },
+    { $push: { "days.$.availablePeople": "PS" } }
+  );
+}
+dbInsertUserUpdate();
 app.use(cors());
 app.use(express.json());
 
