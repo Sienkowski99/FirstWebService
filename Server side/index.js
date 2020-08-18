@@ -40,7 +40,7 @@ function msc(res) {
       console.log(found[0].days);
       found[0].days.forEach((element) => {
         console.log(element);
-        console.log(element.day.availablePeople);
+        console.log(element.availablePeople);
         x =
           x +
           `\n<div>
@@ -50,7 +50,7 @@ function msc(res) {
         <h7>List of friends willing to meet</h7>
         <ul>
           <li>` +
-          element.day.availablePeople +
+          element.availablePeople +
           `</li>
         </ul>
         </div>`;
@@ -96,7 +96,7 @@ function dbUpdate() {
 function dbInsertUserUpdate() {
   dates.update(
     { month: 7, "days.day": 12 },
-    { $set: { "days.$.availablePeople": "PS" } }
+    { $push: { "days.$.availablePeople": "PS" } }
   );
   console.log("added user to database")
 }
