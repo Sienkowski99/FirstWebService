@@ -89,20 +89,21 @@ function dbUpdate() {
     month: 7,
     days: lista,
   };
-  console.log(k);
+  // console.log(k);
   dates.insert(k);
 }
 // dbUpdate();
 function dbInsertUserUpdate() {
   dates.update(
     { month: 7, "days.day": 12 },
-    { $push: { "days.$.availablePeople": "PS" } }
+    { $set: { "days.$.availablePeople": "PS" } }
   );
+  console.log("added user to database")
 }
-dbInsertUserUpdate();
+
 app.use(cors());
 app.use(express.json());
-
+// dbInsertUserUpdate();
 app.get("/", (req, res) => {
   res.send("Dynamic server of 'Firends schedule'");
 });
