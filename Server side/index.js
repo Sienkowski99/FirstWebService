@@ -28,7 +28,11 @@ const months = [
 
 function giveMeListOfPeopleAvailable(list) {
   if (list.length) {
-    return list;
+    let x = "";
+    list.forEach((el) => {
+      x = x + '<li style="font-size: 40px; color: green;">' + el + "</li>\n";
+    });
+    return x;
   } else {
     return "Empty";
   }
@@ -55,11 +59,9 @@ function msc(res) {
           element.day +
           `</h3>
         <h7>List of friends willing to meet</h7>
-        <ul>
-          <li>` +
+          <ul>` +
           giveMeListOfPeopleAvailable(element.availablePeople) +
-          `</li>
-        </ul>
+          `</ul>
         </div>`;
       });
     })
