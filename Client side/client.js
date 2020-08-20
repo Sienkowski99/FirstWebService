@@ -11,7 +11,7 @@ const API_URL_getCalendar =
     ? "http://localhost:8000/getCurrentMonthWithDates"
     : "http://161.35.207.19:8000/getCurrentMonthWithDates";
 
-const form = document.querySelector("form");
+const form = document.querySelector(".loginForm");
 const cover = document.querySelector(".cover");
 const scheduleContent = document.querySelector(".scheduleContent");
 
@@ -71,7 +71,7 @@ function ifLoginSuccess(resp) {
       `
     <div>
     <div style="display: flex; justify-content: space-between; align-items: top;">
-      <form class="yourFreeTime" style="width: 30%;">
+      <form class="yourFreeTime" style="width: 30%; justify-content: flex-start;">
         <label style="color: #114161; font-size: 20px;" for="freeTime"
           >Pick the date and time that you're willing to sacrifice for meeting
           up with friends</label
@@ -164,4 +164,20 @@ form.addEventListener("submit", (event) => {
         ifLoginSuccess(resp);
       }, 1000);
     });
+});
+
+// const formFreeTime = document.querySelector(".yourFreeTime");
+scheduleContent.addEventListener("submit", (event) => {
+  event.preventDefault();
+  // cover.style.display = "";
+  const formFreeTimeData = new FormData(scheduleContent);
+  const freeTime = formFreeTimeData.get("freeTime");
+  // const password = formData.get("password");
+  console.log(freeTime);
+
+  // const package = {
+  //   login,
+  //   password,
+  // };
+  console.log("duawdaiuwhduihawd\nuhduawd\nwdawd\ndawdwa");
 });

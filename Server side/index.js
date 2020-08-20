@@ -26,6 +26,13 @@ const months = [
   "December",
 ];
 
+function giveMeListOfPeopleAvailable(list) {
+  if (list.length) {
+    return list;
+  } else {
+    return "Empty";
+  }
+}
 function msc(res) {
   const date = new Date();
   console.log(date.getDate());
@@ -43,14 +50,14 @@ function msc(res) {
         console.log(element.availablePeople);
         x =
           x +
-          `\n<div>
-        <h4>` +
+          `\n<div style="border-bottom: solid black 1px;">
+        <h3>` +
           element.day +
-          `</h4>
+          `</h3>
         <h7>List of friends willing to meet</h7>
         <ul>
           <li>` +
-          element.availablePeople +
+          giveMeListOfPeopleAvailable(element.availablePeople) +
           `</li>
         </ul>
         </div>`;
@@ -96,14 +103,13 @@ function dbUpdate() {
 function dbInsertUserUpdate() {
   dates.update(
     { month: 7, "days.day": 12 },
-    { $push: { "days.$.availablePeople": "PS" } }
+    { $push: { "days.$.availablePeople": "KT" } }
   );
-  console.log("added user to database")
+  console.log("added user to database");
 }
-
+// dbInsertUserUpdate();
 app.use(cors());
 app.use(express.json());
-// dbInsertUserUpdate();
 app.get("/", (req, res) => {
   res.send("Dynamic server of 'Firends schedule'");
 });
