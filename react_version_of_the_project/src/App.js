@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import LoginForm from './components/LoginForm'
 
 function App() {
+  const bodyStyle = {
+    position: "absolute",
+    display: "flex",
+    // flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "skyblue",
+    width: "100%",
+    height: "100%",
+  }
+  
+  const [displayedComponent, setDisplayedComponent] = useState("")
+  const [nowComponent, setNowComponent] = useState(<LoginForm/>)
+  useEffect(()=>{
+    setDisplayedComponent(nowComponent)
+  },[nowComponent]);
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="App" style={bodyStyle}>
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -18,7 +38,9 @@ function App() {
         >
           Learn React
         </a>
-      </header>
+      </header> */}
+      {/* <LoginForm/> */}
+      {displayedComponent}
     </div>
   );
 }
