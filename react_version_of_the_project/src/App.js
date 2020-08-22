@@ -1,27 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import LoginForm from './components/LoginForm'
+import React, { useState, useEffect } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   const bodyStyle = {
     position: "absolute",
     display: "flex",
-    // flexDirection: "column",
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-around",
     backgroundColor: "skyblue",
     width: "100%",
     height: "100%",
+  };
+
+  const [mainComponents, setMainComponents] = useState([
+    <LoginForm props={pickComponent} />,
+    <RegisterForm />,
+    <Dashboard />,
+  ]);
+  const [displayedComponent, setDisplayedComponent] = useState(
+    mainComponents[0]
+  );
+  function pickComponent(component) {
+    if (component === "next") {
+      nextComponent();
+    } else {
+      setDisplayedComponent(component);
+    }
   }
-  
-  const [displayedComponent, setDisplayedComponent] = useState("")
-  const [nowComponent, setNowComponent] = useState(<LoginForm/>)
-  useEffect(()=>{
-    setDisplayedComponent(nowComponent)
-  },[nowComponent]);
-
-
+  function nextComponent() {
+    if (
+      mainComponents.indexOf(displayedComponent) + 1 >=
+      mainComponents.length
+    ) {
+      setDisplayedComponent(mainComponents[0]);
+    } else {
+      setDisplayedComponent(
+        mainComponents[mainComponents.indexOf(displayedComponent) + 1]
+      );
+    }
+  }
 
   return (
     <div className="App" style={bodyStyle}>
@@ -40,7 +62,12 @@ function App() {
         </a>
       </header> */}
       {/* <LoginForm/> */}
-      {displayedComponent}
+      <div id="bodyContent" style={bodyStyle}>
+        <button onClick={() => pickComponent("next")}>
+          Switch displayed component
+        </button>
+        {displayedComponent}
+      </div>
     </div>
   );
 }

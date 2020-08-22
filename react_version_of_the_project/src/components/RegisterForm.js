@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 // import { Formik } from 'formik';
-import Dashboard from "./Dashboard";
 const axios = require("axios");
 
-const LoginForm = (props) => {
+const LoginForm = () => {
   const formLabelStyle = {
     fontSize: "50px",
     borderRadius: "25px",
@@ -15,36 +14,33 @@ const LoginForm = (props) => {
   };
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
-
-  const API_URL_checkuser =
-    window.location.hostname === "127.0.0.1"
-      ? "http://127.0.0.1:8000/checkuser"
-      : "http://161.35.207.19:8000/checkuser";
+  const [email, setEmail] = useState("");
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log("Trying to log in");
+    console.log("oeodkeo");
     axios
-      .post(API_URL_checkuser, { login: login, password: password })
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.state) {
-          //   event.form.reset();
-          props.props(<Dashboard />);
-        }
-      })
+      .get("http://127.0.0.1:8000/admin")
+      .then((res) => console.log(res))
       .catch((err) => console.log(err));
   }
 
   return (
     <div>
-      <label>Log In</label>
+      <label>Register</label>
       <form onSubmit={handleSubmit}>
         <label>Login</label>
         <input
           type="text"
           value={login}
           onChange={(e) => setLogin(e.target.value)}
+        />
+        <br />
+        <label>Email</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <br />
         <label>Password</label>
@@ -54,7 +50,7 @@ const LoginForm = (props) => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <br />
-        <button type="submit">Log In</button>
+        <button type="submit">Register</button>
       </form>
     </div>
   );
