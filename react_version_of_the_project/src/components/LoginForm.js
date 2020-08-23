@@ -17,8 +17,8 @@ const LoginForm = (props) => {
   const [password, setPassword] = useState("");
 
   const API_URL_checkuser =
-    window.location.hostname === "127.0.0.1"
-      ? "http://127.0.0.1:8000/checkuser"
+    window.location.hostname === "localhost"
+      ? "http://localhost:8000/checkuser"
       : "http://161.35.207.19:8000/checkuser";
 
   function handleSubmit(event) {
@@ -30,7 +30,7 @@ const LoginForm = (props) => {
         console.log(res.data);
         if (res.data.state) {
           //   event.form.reset();
-          props.props(<Dashboard />);
+          props.pickComponent(<Dashboard resData={res.data} />);
         }
       })
       .catch((err) => console.log(err));

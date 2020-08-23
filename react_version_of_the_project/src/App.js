@@ -11,14 +11,14 @@ function App() {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "space-around",
+    // justifyContent: "space-around",
     backgroundColor: "skyblue",
     width: "100%",
     height: "100%",
   };
 
   const [mainComponents, setMainComponents] = useState([
-    <LoginForm props={pickComponent} />,
+    <LoginForm pickComponent={pickComponent} />,
     <RegisterForm />,
     <Dashboard />,
   ]);

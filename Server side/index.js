@@ -44,9 +44,11 @@ function msc(res) {
   const year = date.getFullYear();
   console.log(months[month] + " " + year);
   let x = "";
+  let y = {};
   dates
     .find({ year: year, month: month })
     .then((found) => {
+      y = found[0];
       console.log(found[0].days[date.getDate() - 1]);
       console.log(found[0].days);
       found[0].days.forEach((element) => {
@@ -70,6 +72,7 @@ function msc(res) {
       let html = {
         title: months[month] + " " + year,
         days: x,
+        days2: y,
       };
       console.log(html.days);
       // return html;
@@ -102,12 +105,15 @@ function dbUpdate() {
   dates.insert(k);
 }
 // dbUpdate();
-function dbInsertUserUpdate() {
-  dates.update(
-    { month: 7, "days.day": 12 },
-    { $push: { "days.$.availablePeople": "KT" } }
-  );
-  console.log("added user to database");
+function dbInsertUserUpdate(year, month, day, personInitials) {
+  dates
+    .update(
+      { year: year, month: month, "days.day": day },
+      { $push: { "days.$.availablePeople": personInitials } }
+    )
+    .then((res) => console.log("Added user successfuly"))
+    .catch((err) => console.log("An error has ocurred: " + err));
+  // console.log("added user to database");
 }
 // dbInsertUserUpdate();
 app.use(cors());
@@ -124,6 +130,18 @@ app.get("/getCurrentMonthWithDates", (req, res) => {
   res.json({
     msg: "BLABLA",
   });
+});
+
+app.post("/addUserToDB", (req, res) => {
+  const date = new Date(req.body.date);
+  console.log(date.getFullYear(), date.getMonth(), date.getDate());
+  dbInsertUserUpdate(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    req.body.personInitials
+  );
+  console.log(date);
 });
 
 app.post("/checkuser", (req, res) => {

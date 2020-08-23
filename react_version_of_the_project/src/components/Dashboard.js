@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 const axios = require("axios");
 
-const Dashboard = () => {
+const Dashboard = (props) => {
   const main = {
     backgroundColor: "orange",
     display: "flex",
@@ -12,16 +12,22 @@ const Dashboard = () => {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log("oeodkeo");
+    let x = new Date();
+    console.log(x.getDay());
+    console.log(typeof pickedDate);
     axios
-      .get("http://127.0.0.1:8000/admin")
+      .post("http://127.0.0.1:8000/addUserToDB", {
+        date: pickedDate,
+        personInitials: "KJ",
+      })
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   }
-
+  console.log(props.resData);
   const [todaysDate, setTodaysDate] = useState(new Date());
   const [pickedDate, setPickedDate] = useState(new Date());
-
+  const [resData, setResData] = useState(props.resData);
+  // const [monthWithYear, setMonthWithYear] = useState(props.month);
   return (
     <div style={main}>
       <form
@@ -80,14 +86,24 @@ const Dashboard = () => {
           }}
         >
           <button>Previous</button>
-          <p style={{ color: "red" }}>MONTH NAME</p>
+          <p style={{ color: "red" }}>{resData.content.title}</p>
           <button>Next</button>
         </div>
-        <p>DATYYY</p>
+        {resData.content.days2.days.map((element) => (
+          <div key={element.day}>
+            <h3 key={element.day}>{element.day}</h3>
+            <p>People willing to meet</p>
+            <ul>
+              {element.availablePeople.map((el) => (
+                <p key={el}>{el}</p>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
 
       <img
-        style={{ width: "30%" }}
+        style={{ width: "30%", height: "320px" }}
         src="https://www.catster.com/wp-content/uploads/2018/01/An-orange-tabby-cat-with-the-M-marking-on-the-forehead.jpg"
       />
     </div>
