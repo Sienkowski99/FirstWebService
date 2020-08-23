@@ -29,15 +29,8 @@ const Dashboard = (props) => {
   const [resData, setResData] = useState(props.resData);
   // const [monthWithYear, setMonthWithYear] = useState(props.month);
   return (
-    <div style={main}>
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          width: "30%",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+    <div>
+      <form onSubmit={handleSubmit}>
         <label>
           Pick the date and time that you're willing to sacrifice for meeting up
           with friends
@@ -72,21 +65,21 @@ const Dashboard = (props) => {
 
       <div
         id="datesElement"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-around",
-          width: "30%",
-        }}
+        // style={{
+        //   display: "flex",
+        //   flexDirection: "column",
+        //   justifyContent: "space-around",
+        //   width: "30%",
+        // }}
       >
         <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
+        // style={{
+        //   display: "flex",
+        //   justifyContent: "space-between",
+        // }}
         >
           <button>Previous</button>
-          <p style={{ color: "red" }}>{resData.content.title}</p>
+          <p>{resData.content.title}</p>
           <button>Next</button>
         </div>
         {resData.content.days2.days.map((element) => (
@@ -103,7 +96,7 @@ const Dashboard = (props) => {
       </div>
 
       <img
-        style={{ width: "30%", height: "320px" }}
+        // style={{ width: "30%", height: "320px" }}
         src="https://www.catster.com/wp-content/uploads/2018/01/An-orange-tabby-cat-with-the-M-marking-on-the-forehead.jpg"
       />
     </div>

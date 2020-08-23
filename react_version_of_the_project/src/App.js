@@ -6,16 +6,16 @@ import RegisterForm from "./components/RegisterForm";
 import Dashboard from "./components/Dashboard";
 
 function App() {
-  const bodyStyle = {
-    position: "absolute",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    // justifyContent: "space-around",
-    backgroundColor: "skyblue",
-    width: "100%",
-    height: "100%",
-  };
+  // const bodyStyle = {
+  //   position: "absolute",
+  //   display: "flex",
+  //   flexDirection: "column",
+  //   alignItems: "center",
+  //   // justifyContent: "space-around",
+  //   backgroundColor: "skyblue",
+  //   width: "100%",
+  //   height: "100%",
+  // };
 
   const [mainComponents, setMainComponents] = useState([
     <LoginForm pickComponent={pickComponent} />,
@@ -46,7 +46,7 @@ function App() {
   }
 
   return (
-    <div className="App" style={bodyStyle}>
+    <div className="App">
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -62,7 +62,7 @@ function App() {
         </a>
       </header> */}
       {/* <LoginForm/> */}
-      <div id="bodyContent" style={bodyStyle}>
+      <div id="bodyContent">
         <button onClick={() => pickComponent("next")}>
           Switch displayed component
         </button>

@@ -13,6 +13,12 @@ const LoginForm = (props) => {
     padding: "10px",
     backgroundColor: "white",
   };
+  const formStyle = {
+    display: "flex",
+    flexDirection: "column",
+    // width: "20%",
+    justifyContent: "space-around",
+  };
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
@@ -46,14 +52,14 @@ const LoginForm = (props) => {
           value={login}
           onChange={(e) => setLogin(e.target.value)}
         />
-        <br />
+        {/* <br /> */}
         <label>Password</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <br />
+        {/* <br /> */}
         <button type="submit">Log In</button>
       </form>
     </div>
