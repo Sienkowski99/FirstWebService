@@ -105,7 +105,7 @@ function dbUpdate() {
   dates.insert(k);
 }
 // dbUpdate();
-function dbInsertUserUpdate(year, month, day, personInitials) {
+function dbInsertUserUpdate(year, month, day, hours, minutes, personInitials) {
   dates
     .update(
       { year: year, month: month, "days.day": day },
@@ -134,13 +134,15 @@ app.get("/getCurrentMonthWithDates", (req, res) => {
 
 app.post("/addUserToDB", (req, res) => {
   const date = new Date(req.body.date);
-  console.log(date.getFullYear(), date.getMonth(), date.getDate());
-  dbInsertUserUpdate(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
-    req.body.personInitials
-  );
+  console.log(date.getFullYear(), date.getMonth(), date.getDate(),date.getHours(), date.getMinutes());
+  // dbInsertUserUpdate(
+  //   date.getFullYear(),
+  //   date.getMonth(),
+  //   date.getDate(),
+  //   date.getHours(),
+  //   date.getMinutes(),
+  //   req.body.personInitials
+  // );
   console.log(date);
 });
 

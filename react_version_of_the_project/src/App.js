@@ -16,11 +16,14 @@ function App() {
   //   width: "100%",
   //   height: "100%",
   // };
-
+  const [userState, setUserState] = useState({
+    user: {},
+    status: "NOT_LOGGED_IN"
+  })
   const [mainComponents, setMainComponents] = useState([
     <LoginForm pickComponent={pickComponent} />,
     <RegisterForm />,
-    <Dashboard />,
+    // <Dashboard />,
   ]);
   const [displayedComponent, setDisplayedComponent] = useState(
     mainComponents[0]
@@ -61,7 +64,6 @@ function App() {
           Learn React
         </a>
       </header> */}
-      {/* <LoginForm/> */}
       <div id="bodyContent">
         <button onClick={() => pickComponent("next")}>
           Switch displayed component
