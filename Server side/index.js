@@ -132,9 +132,19 @@ app.get("/getCurrentMonthWithDates", (req, res) => {
   });
 });
 
+app.post("/registerNewUser", (req, res) => {
+  console.log(req);
+});
+
 app.post("/addUserToDB", (req, res) => {
   const date = new Date(req.body.date);
-  console.log(date.getFullYear(), date.getMonth(), date.getDate(),date.getHours(), date.getMinutes());
+  console.log(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    date.getHours(),
+    date.getMinutes()
+  );
   // dbInsertUserUpdate(
   //   date.getFullYear(),
   //   date.getMonth(),

@@ -3,15 +3,15 @@ import React, { useState } from "react";
 const axios = require("axios");
 
 const LoginForm = () => {
-  const formLabelStyle = {
-    fontSize: "50px",
-    borderRadius: "25px",
-    border: "solid black 2px",
-    // marginBottom: "30px",
-    // width: "50%",
-    padding: "10px",
-    backgroundColor: "white",
-  };
+  // const formLabelStyle = {
+  //   fontSize: "50px",
+  //   borderRadius: "25px",
+  //   border: "solid black 2px",
+  //   // marginBottom: "30px",
+  //   // width: "50%",
+  //   padding: "10px",
+  //   backgroundColor: "white",
+  // };
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -35,21 +35,21 @@ const LoginForm = () => {
           value={login}
           onChange={(e) => setLogin(e.target.value)}
         />
-        <br />
+        {/* <br /> */}
         <label>Email</label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <br />
+        {/* <br /> */}
         <label>Password</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <br />
+        {/* <br /> */}
         <button type="submit">Register</button>
       </form>
     </div>
