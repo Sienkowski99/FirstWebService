@@ -9,12 +9,12 @@ const Dashboard = (props) => {
     alignItems: "top",
     width: "80%",
   };
-
+  // console.log(props.showUserStatus());
   function handleSubmit(event) {
     event.preventDefault();
-    let x = new Date();
-    console.log(x.getDay());
-    console.log(typeof pickedDate);
+    // let x = new Date();
+    // console.log(x.getDay());
+    // console.log(typeof pickedDate);
     axios
       .post("http://127.0.0.1:8000/addUserToDB", {
         date: pickedDate,
@@ -23,13 +23,14 @@ const Dashboard = (props) => {
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   }
-  console.log(props.resData);
+  // console.log(props.userStatus);
   const [todaysDate, setTodaysDate] = useState(new Date());
   const [pickedDate, setPickedDate] = useState(new Date());
-  const [resData, setResData] = useState(props.resData);
+  const [resData, setResData] = useState(props.serverResponse.data);
   // const [monthWithYear, setMonthWithYear] = useState(props.month);
   return (
     <div>
+      <h1>{props.userStatus.status}</h1>
       <form onSubmit={handleSubmit}>
         <label>
           Pick the date and time that you're willing to sacrifice for meeting up

@@ -16,18 +16,41 @@ function App() {
   //   width: "100%",
   //   height: "100%",
   // };
-  const [userState, setUserState] = useState({
+  // constructor() {
+  //   super()
+  //   this.state = {
+  //     user: {},
+  //     status: "NOT_LOGGED_IN",
+  //   }
+  // }
+
+  const [userStatus, setUserStatus] = useState({
     user: {},
-    status: "NOT_LOGGED_IN"
-  })
+    status: "NOT_LOGGED_IN",
+    bla: "sdoiqjw",
+  });
+
+  const [serverResponse, setServerResponse] = useState({});
+
+  const changeServerResponse = (srvRes) => {
+    setServerResponse(srvRes);
+    console.log("server response has been changed");
+  };
+  const changeUserStatus = (newUserData) => {
+    setUserStatus(newUserData);
+    console.log("user is being changed in app.js", userStatus);
+  };
+
   const [mainComponents, setMainComponents] = useState([
-    <LoginForm pickComponent={pickComponent} />,
-    <RegisterForm />,
-    // <Dashboard />,
+    "LoginForm",
+    "RegisterForm",
+    "Dashboard",
   ]);
+
   const [displayedComponent, setDisplayedComponent] = useState(
     mainComponents[0]
   );
+
   function pickComponent(component) {
     if (component === "next") {
       nextComponent();
@@ -35,6 +58,7 @@ function App() {
       setDisplayedComponent(component);
     }
   }
+
   function nextComponent() {
     if (
       mainComponents.indexOf(displayedComponent) + 1 >=
@@ -47,6 +71,10 @@ function App() {
       );
     }
   }
+
+  useEffect(() => {
+    console.log("User status has been changed in App.js", userStatus);
+  }, [userStatus]);
 
   return (
     <div className="App">
@@ -68,7 +96,30 @@ function App() {
         <button onClick={() => pickComponent("next")}>
           Switch displayed component
         </button>
-        {displayedComponent}
+        {displayedComponent === "LoginForm" ? (
+          <LoginForm
+            pickComponent={pickComponent}
+            userStatus={userStatus}
+            changeUserStatus={changeUserStatus}
+            changeServerResponse={changeServerResponse}
+          />
+        ) : null}
+        {displayedComponent === "RegisterForm" ? (
+          <RegisterForm
+            pickComponent={pickComponent}
+            userStatus={userStatus}
+            changeUserStatus={changeUserStatus}
+          />
+        ) : null}
+        {displayedComponent === "Dashboard" ? (
+          <Dashboard
+            pickComponent={pickComponent}
+            userStatus={userStatus}
+            changeUserStatus={changeUserStatus}
+            serverResponse={serverResponse}
+            changeServerResponse={changeServerResponse}
+          />
+        ) : null}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { Formik } from 'formik';
 import Dashboard from "./Dashboard";
 const axios = require("axios");
@@ -21,6 +21,7 @@ const LoginForm = (props) => {
   };
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
+  const [userStatusLogin, setUserStatusLogin] = useState(props.userStatus);
 
   const API_URL_checkuser =
     window.location.hostname === "localhost"
@@ -33,17 +34,43 @@ const LoginForm = (props) => {
     axios
       .post(API_URL_checkuser, { login: login, password: password })
       .then((res) => {
-        console.log(res.data);
-        if (res.data.state) {
-          //   event.form.reset();
-          props.pickComponent(<Dashboard resData={res.data} />);
-        }
-      })
-      .catch((err) => console.log(err));
-  }
+        // setUserStatusLogin();
+        props.changeUserStatus({
+          user: {
+            login: login,
+          },
+          status: "LOGGED_IN",
+        });
+        // console.log(userStatusLogin);
+        // props.showUserStatus();
+        // console.log(res.data);
+        // console.log(props.returnUserStatus());
+        props.changeServerResponse(res);
+        props.pickComponent(
+          "Dashboard"
+          // <Dashboard resData={res.data} userStatus={props.userStatus} />
+        );
+        // if (res.data.state) {
+        //   event.form.reset();
 
+        // }
+      })
+      .then((x) =>
+        console.log("iauhdioajhoiwd", userStatusLogin, props.userStatus)
+      )
+      // .then((x) => console.log(userStatusLogin))
+      .catch((err) => alert(err));
+  }
+  console.log(props.userStatus);
+  const [zalogowany, setZalogowany] = useState(props.userStatus);
+  useEffect(() => {
+    // setZalogowany(props.userStatus);
+    console.log("ZMIANAAAAAAAA");
+    console.log(props.userStatus);
+  }, [props.userStatus]);
   return (
     <div>
+      <h1>{props.userStatus.status}</h1>
       <label>Log In</label>
       <form onSubmit={handleSubmit}>
         <label>Login</label>
