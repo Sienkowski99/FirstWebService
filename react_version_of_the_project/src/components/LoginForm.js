@@ -55,13 +55,10 @@ const LoginForm = (props) => {
 
         // }
       })
-      .then((x) =>
-        console.log("iauhdioajhoiwd", userStatusLogin, props.userStatus)
-      )
       // .then((x) => console.log(userStatusLogin))
       .catch((err) => alert(err));
   }
-  console.log(props.userStatus);
+  // console.log(props.userStatus);
   const [zalogowany, setZalogowany] = useState(props.userStatus);
   useEffect(() => {
     // setZalogowany(props.userStatus);
@@ -71,7 +68,7 @@ const LoginForm = (props) => {
   return (
     <div>
       <h1>{props.userStatus.status}</h1>
-      <label>Log In</label>
+      {/* <label>Log In</label> */}
       <form onSubmit={handleSubmit}>
         <label>Login</label>
         <input

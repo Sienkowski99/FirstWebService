@@ -27,7 +27,6 @@ function App() {
   const [userStatus, setUserStatus] = useState({
     user: {},
     status: "NOT_LOGGED_IN",
-    bla: "sdoiqjw",
   });
 
   const [serverResponse, setServerResponse] = useState({});

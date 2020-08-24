@@ -28,9 +28,15 @@ const Dashboard = (props) => {
   const [pickedDate, setPickedDate] = useState(new Date());
   const [resData, setResData] = useState(props.serverResponse.data);
   // const [monthWithYear, setMonthWithYear] = useState(props.month);
+
+  function handleLogOut() {
+    props.pickComponent("LoginForm")
+    props.changeServerResponse({})
+    props.changeUserStatus({user: {},status: "NOT_LOGGED_IN"})
+  }
   return (
     <div>
-      <h1>{props.userStatus.status}</h1>
+      <h1>{props.userStatus.status} as {props.userStatus.user.login}</h1>
       <form onSubmit={handleSubmit}>
         <label>
           Pick the date and time that you're willing to sacrifice for meeting up
@@ -63,7 +69,7 @@ const Dashboard = (props) => {
           sacrifice
         </button>
       </form>
-
+      <button onClick={()=>handleLogOut()}>Log out</button>
       <div
         id="datesElement"
         // style={{
@@ -79,9 +85,9 @@ const Dashboard = (props) => {
         //   justifyContent: "space-between",
         // }}
         >
-          <button>Previous</button>
+          <button disabled>Previous</button>
           <p>{resData.content.title}</p>
-          <button>Next</button>
+          <button disabled>Next</button>
         </div>
         {resData.content.days2.days.map((element) => (
           <div key={element.day}>
