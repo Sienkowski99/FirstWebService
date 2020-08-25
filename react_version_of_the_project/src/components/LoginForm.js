@@ -68,7 +68,7 @@ const LoginForm = (props) => {
   return (
     <div>
       <h1>{props.userStatus.status}</h1>
-      {/* <label>Log In</label> */}
+      <label>Log In</label>
       <form onSubmit={handleSubmit}>
         <label>Login</label>
         <input

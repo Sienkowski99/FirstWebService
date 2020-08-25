@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // import { Formik } from 'formik';
 const axios = require("axios");
 
-const LoginForm = () => {
+const LoginForm = (props) => {
   // const formLabelStyle = {
   //   fontSize: "50px",
   //   borderRadius: "25px",
@@ -14,19 +14,32 @@ const LoginForm = () => {
   // };
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
   const [email, setEmail] = useState("");
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log("oeodkeo");
-    axios
-      .get("http://127.0.0.1:8000/admin")
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    if (password === password2) {
+      console.log("oeodkeo");
+      axios
+        .post("http://127.0.0.1:8000/registerNewUser", {
+          login: login,
+          password: password,
+          email: email,
+          })
+        .then((res) => console.log(res))
+        .then(x=> {props.pickComponent("LoginForm");
+          alert("Now you have to log in")})
+        .catch((err) => console.log(err))
+        
+    } else {
+      alert("Passwords have to be the same")
+    }
   }
 
   return (
     <div>
+      <h1>{props.userStatus.status}</h1>
       <label>Register</label>
       <form onSubmit={handleSubmit}>
         <label>Login</label>
@@ -50,6 +63,12 @@ const LoginForm = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         {/* <br /> */}
+        <label>Repeat Password</label>
+        <input
+          type="password"
+          value={password2}
+          onChange={(e) => setPassword2(e.target.value)}
+        />
         <button type="submit">Register</button>
       </form>
     </div>

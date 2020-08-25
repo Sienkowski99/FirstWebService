@@ -10,7 +10,7 @@ function hash(word) {
   console.log(sha256(word));
   return sha256(word);
 }
-
+// console.log(hash("SP"))
 const months = [
   "January",
   "February",
@@ -68,13 +68,13 @@ function msc(res) {
       });
     })
     .then((nic) => {
-      console.log(x);
+      // console.log(x);
       let html = {
         title: months[month] + " " + year,
         days: x,
         days2: y,
       };
-      console.log(html.days);
+      // console.log(html.days);
       // return html;
       return res.json({
         state: true,
@@ -133,7 +133,14 @@ app.get("/getCurrentMonthWithDates", (req, res) => {
 });
 
 app.post("/registerNewUser", (req, res) => {
-  console.log(req);
+  // users.insert({
+  //   login: req.body.login,
+  //   password: hash(req.body.password),
+  //   email: req.body.email,
+  // })
+  console.log(req.body);
+  console.log("New user has been added to DB")
+  res.json("New user has been added to DB")
 });
 
 app.post("/addUserToDB", (req, res) => {
@@ -167,7 +174,7 @@ app.post("/checkuser", (req, res) => {
     .then((result) => {
       console.log(result[0].password);
       console.log(req.body.password);
-      if (result[0].password === req.body.password) {
+      if (result[0].password === hash(req.body.password)) {
         console.log("mam takiego");
         msc(res);
       } else {

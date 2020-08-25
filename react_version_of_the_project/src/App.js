@@ -4,6 +4,7 @@ import "./App.css";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import Dashboard from "./components/Dashboard";
+import axios from "axios";
 
 function App() {
   // const bodyStyle = {
@@ -30,7 +31,9 @@ function App() {
   });
 
   const [serverResponse, setServerResponse] = useState({});
-
+  checkOginStatus() {
+    axios.get("http://localhost:8000/logged_in", {withCredentials: true}).then(res=>console.log(res)).catch(err=>console.log(err))
+  }
   const changeServerResponse = (srvRes) => {
     setServerResponse(srvRes);
     console.log("server response has been changed");
@@ -43,7 +46,7 @@ function App() {
   const [mainComponents, setMainComponents] = useState([
     "LoginForm",
     "RegisterForm",
-    "Dashboard",
+    // "Dashboard",
   ]);
 
   const [displayedComponent, setDisplayedComponent] = useState(
@@ -95,6 +98,7 @@ function App() {
         <button onClick={() => pickComponent("next")}>
           Switch displayed component
         </button>
+        {/* <h1>{userStatus.status}</h1> */}
         {displayedComponent === "LoginForm" ? (
           <LoginForm
             pickComponent={pickComponent}
