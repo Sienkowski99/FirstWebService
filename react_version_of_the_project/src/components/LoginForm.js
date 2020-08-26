@@ -34,26 +34,30 @@ const LoginForm = (props) => {
     axios
       .post(API_URL_checkuser, { login: login, password: password })
       .then((res) => {
-        // setUserStatusLogin();
-        props.changeUserStatus({
-          user: {
-            login: login,
-          },
-          status: "LOGGED_IN",
-        });
-        // console.log(userStatusLogin);
-        // props.showUserStatus();
-        // console.log(res.data);
-        // console.log(props.returnUserStatus());
-        props.changeServerResponse(res);
-        props.pickComponent(
-          "Dashboard"
-          // <Dashboard resData={res.data} userStatus={props.userStatus} />
-        );
-        // if (res.data.state) {
-        //   event.form.reset();
+        console.log(res);
+        if (res.data.authenticated) {
+          props.changeUserStatus({
+            user: {
+              login: login,
+            },
+            status: "LOGGED_IN",
+          });
+          // console.log(userStatusLogin);
+          // props.showUserStatus();
+          // console.log(res.data);
+          // console.log(props.returnUserStatus());
+          props.changeServerResponse(res);
+          props.pickComponent(
+            "Dashboard"
+            // <Dashboard resData={res.data} userStatus={props.userStatus} />
+          );
+          // if (res.data.state) {
+          //   event.form.reset();
 
-        // }
+          // }
+        } else {
+          alert("User not existing");
+        }
       })
       // .then((x) => console.log(userStatusLogin))
       .catch((err) => alert(err));

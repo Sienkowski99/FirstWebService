@@ -20,23 +20,12 @@ const months = [
   "June",
   "July",
   "August",
-  "October",
   "September",
+  "October",
   "November",
   "December",
 ];
 
-function giveMeListOfPeopleAvailable(list) {
-  if (list.length) {
-    let x = "";
-    list.forEach((el) => {
-      x = x + '<li style="font-size: 40px; color: green;">' + el + "</li>\n";
-    });
-    return x;
-  } else {
-    return "Empty";
-  }
-}
 function msc(res) {
   const date = new Date();
   console.log(date.getDate());
@@ -46,38 +35,26 @@ function msc(res) {
   let x = "";
   let y = {};
   dates
-    .find({ year: year, month: month })
+    .find({ year: year, "months.name": months[month] })
+    // .then((x) => console.log(x[0]))
     .then((found) => {
-      y = found[0];
-      console.log(found[0].days[date.getDate() - 1]);
-      console.log(found[0].days);
-      found[0].days.forEach((element) => {
+      y = found[0].months[month];
+      console.log(found);
+      console.log(found[0].months[month].days[date.getDate() - 1]);
+      console.log(found[0].months[month].days);
+      found[0].months[month].days.forEach((element) => {
         console.log(element);
         console.log(element.availablePeople);
-        x =
-          x +
-          `\n<div style="border-bottom: solid black 1px;">
-        <h3>` +
-          element.day +
-          `</h3>
-        <h7>List of friends willing to meet</h7>
-          <ul>` +
-          giveMeListOfPeopleAvailable(element.availablePeople) +
-          `</ul>
-        </div>`;
       });
     })
     .then((nic) => {
-      // console.log(x);
       let html = {
         title: months[month] + " " + year,
-        days: x,
         days2: y,
       };
-      // console.log(html.days);
-      // return html;
       return res.json({
-        state: true,
+        existing: true,
+        authenticated: true,
         msg: "In the future there will be a list of dates",
         content: html,
       });
@@ -88,30 +65,33 @@ const db = monk("localhost:27017/firstWebService");
 const users = db.get("users");
 const dates = db.get("dates");
 
-function dbUpdate() {
-  let lista = [];
-  for (let i = 0; i < 31; i++) {
-    lista.push({
-      day: i + 1,
-      availablePeople: [],
-    });
-  }
-  k = {
-    year: 2020,
-    month: 7,
-    days: lista,
-  };
-  // console.log(k);
-  dates.insert(k);
-}
-// dbUpdate();
-function dbInsertUserUpdate(year, month, day, hours, minutes, personInitials) {
+function dbInsertUserUpdate(
+  year,
+  month,
+  day,
+  hours,
+  minutes,
+  personInitials,
+  res
+) {
   dates
     .update(
-      { year: year, month: month, "days.day": day },
-      { $push: { "days.$.availablePeople": personInitials } }
+      { year: year },
+      {
+        $push: { "months.$[name].days.$[day].availablePeople": personInitials },
+      },
+      { arrayFilters: [{ "name.name": months[month] }, { "day.day": day }] }
     )
-    .then((res) => console.log("Added user successfuly"))
+    .then((y) => {
+      console.log("Added user's date successfuly");
+      dates
+        .find({ year: new Date().getFullYear() })
+        .then((yearObject) => {
+          console.log("Returning updated dates.");
+          return yearObject[0];
+        })
+        .then((y) => res.json({ updatedDates: y }));
+    })
     .catch((err) => console.log("An error has ocurred: " + err));
   // console.log("added user to database");
 }
@@ -133,16 +113,20 @@ app.get("/getCurrentMonthWithDates", (req, res) => {
 });
 
 app.post("/registerNewUser", (req, res) => {
-  // users.insert({
-  //   login: req.body.login,
-  //   password: hash(req.body.password),
-  //   email: req.body.email,
-  // })
+  users.insert({
+    login: req.body.login,
+    password: hash(req.body.password),
+    email: req.body.email,
+  });
   console.log(req.body);
-  console.log("New user has been added to DB")
-  res.json("New user has been added to DB")
+  console.log("New user has been added to DB");
+  res.json("New user has been added to DB");
 });
 
+function adminUpdate() {
+  // dates.insert(jedjed);
+}
+adminUpdate();
 app.post("/addUserToDB", (req, res) => {
   const date = new Date(req.body.date);
   console.log(
@@ -150,45 +134,50 @@ app.post("/addUserToDB", (req, res) => {
     date.getMonth(),
     date.getDate(),
     date.getHours(),
-    date.getMinutes()
+    date.getMinutes(),
+    req.body.personInitials
   );
-  // dbInsertUserUpdate(
-  //   date.getFullYear(),
-  //   date.getMonth(),
-  //   date.getDate(),
-  //   date.getHours(),
-  //   date.getMinutes(),
-  //   req.body.personInitials
-  // );
+  dbInsertUserUpdate(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    date.getHours(),
+    date.getMinutes(),
+    req.body.personInitials,
+    res
+  );
   console.log(date);
 });
 
 app.post("/checkuser", (req, res) => {
-  console.log(req.body);
   console.log("Starting connection to database");
-  console.log(req.body);
-  const x = req.body.login;
-  console.log(typeof x);
   users
-    .find({ login: x })
-    .then((result) => {
-      console.log(result[0].password);
-      console.log(req.body.password);
-      if (result[0].password === hash(req.body.password)) {
-        console.log("mam takiego");
+    .find({ login: req.body.login })
+    .then((resultFromDatabase) => {
+      if (resultFromDatabase === []) {
+        res.json({
+          existing: false,
+          authenticated: false,
+          msg: "Given user doesn't exist",
+        });
+      }
+      if (resultFromDatabase[0].password === hash(req.body.password)) {
+        console.log("User exists and passowrd is correct");
         msc(res);
       } else {
-        console.log("nie mam (haslo)");
+        console.log("Password is incorrect");
         res.json({
-          state: false,
+          existing: true,
+          authenticated: false,
           msg: "Password is invalid",
         });
       }
     })
     .catch((error) => {
-      console.log("nie mam (haslo)");
+      console.log(error);
+      //User not in the Database
       res.json({
-        state: false,
+        existing: false,
         msg: "Given user doesn't exist",
       });
     });

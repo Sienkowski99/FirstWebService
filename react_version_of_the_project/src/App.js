@@ -31,12 +31,12 @@ function App() {
   });
 
   const [serverResponse, setServerResponse] = useState({});
-  checkOginStatus() {
-    axios.get("http://localhost:8000/logged_in", {withCredentials: true}).then(res=>console.log(res)).catch(err=>console.log(err))
-  }
+  // checkOginStatus() {
+  //   axios.get("http://localhost:8000/logged_in", {withCredentials: true}).then(res=>console.log(res)).catch(err=>console.log(err))
+  // }
   const changeServerResponse = (srvRes) => {
     setServerResponse(srvRes);
-    console.log("server response has been changed");
+    console.log("server response has been changed to: ", srvRes);
   };
   const changeUserStatus = (newUserData) => {
     setUserStatus(newUserData);
