@@ -2,20 +2,16 @@ import React, { useState, useEffect } from "react";
 const axios = require("axios");
 
 const Dashboard = (props) => {
-  const main = {
-    backgroundColor: "orange",
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "top",
-    width: "80%",
-  };
+  // const main = {
+  //   backgroundColor: "orange",
+  //   display: "flex",
+  //   justifyContent: "space-around",
+  //   alignItems: "top",
+  //   width: "80%",
+  // };
   // console.log(props.showUserStatus());
   function handleSubmit(event) {
     event.preventDefault();
-    // let x = new Date();
-    // console.log(x.getDay());
-    // console.log(typeof pickedDate);
-    // console.log(props);
     axios
       .post("http://127.0.0.1:8000/addUserToDB", {
         date: pickedDate,
@@ -24,26 +20,18 @@ const Dashboard = (props) => {
       .then((res) => {
         console.log(props.serverResponse);
         console.log(res);
-        // props.changeServerResponse({
-        //   ...props.serverResponse,
-        //   days2: res.data.updatedDates.months[7],
-        // });
         let x = props.serverResponse;
-        // console.log
         x.data.content.days2 = res.data.updatedDates.months[7];
-        console.log({ ...x, zmiana: true });
-        // console.log({
-        //   ...props.serverResponse,
-        //   data.content: res.data.updatedDates.months[7],
-        // });
+        // console.log({ ...x, zmiana: true });
         props.changeServerResponse(x);
-        setX("X");
+        // setX("X");
         // props.changeServerResponse({ ...x, zmiana: true });
       })
+      // .then(y=>setX(y))
       .catch((err) => console.log(err));
+    // setX("dno")
   }
   // console.log(props.userStatus);
-  const [x, setX] = useState("x");
   const [todaysDate, setTodaysDate] = useState(new Date());
   const [pickedDate, setPickedDate] = useState(new Date());
   const [resData, setResData] = useState(props.serverResponse.data);
@@ -62,12 +50,7 @@ const Dashboard = (props) => {
         {props.userStatus.status} as {props.userStatus.user.login} and{" "}
         {props.serverResponse.data.content.days2.days[0].availablePeople[0]}
       </h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Pick the date and time that you're willing to sacrifice for meeting up
-          with friends
-        </label>
-        <button
+      <button
           onClick={() => {
             console.log(
               "konsolka",
@@ -76,8 +59,14 @@ const Dashboard = (props) => {
             );
           }}
         >
-          dawd
-        </button>
+          Check state
+      </button>
+      <button type="button" name="cos" onClick={()=>setX("dnwio")}>Refresh</button>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Pick the date and time that you're willing to sacrifice for meeting up
+          with friends
+        </label>
         <input
           type="datetime-local"
           id="freeTime"
