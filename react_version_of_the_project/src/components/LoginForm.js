@@ -4,21 +4,21 @@ import Dashboard from "./Dashboard";
 const axios = require("axios");
 
 const LoginForm = (props) => {
-  const formLabelStyle = {
-    fontSize: "50px",
-    borderRadius: "25px",
-    border: "solid black 2px",
-    // marginBottom: "30px",
-    // width: "50%",
-    padding: "10px",
-    backgroundColor: "white",
-  };
-  const formStyle = {
-    display: "flex",
-    flexDirection: "column",
-    // width: "20%",
-    justifyContent: "space-around",
-  };
+  // const formLabelStyle = {
+  //   fontSize: "50px",
+  //   borderRadius: "25px",
+  //   border: "solid black 2px",
+  //   // marginBottom: "30px",
+  //   // width: "50%",
+  //   padding: "10px",
+  //   backgroundColor: "white",
+  // };
+  // const formStyle = {
+  //   display: "flex",
+  //   flexDirection: "column",
+  //   // width: "20%",
+  //   justifyContent: "space-around",
+  // };
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [userStatusLogin, setUserStatusLogin] = useState(props.userStatus);

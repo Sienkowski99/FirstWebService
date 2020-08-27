@@ -27,11 +27,19 @@ const Dashboard = (props) => {
         // setX("X");
         // props.changeServerResponse({ ...x, zmiana: true });
       })
+      .then((y) => {
+        if (x) {
+          setX(false);
+        } else {
+          setX(true);
+        }
+      })
       // .then(y=>setX(y))
       .catch((err) => console.log(err));
     // setX("dno")
   }
   // console.log(props.userStatus);
+  const [x, setX] = useState(true);
   const [todaysDate, setTodaysDate] = useState(new Date());
   const [pickedDate, setPickedDate] = useState(new Date());
   const [resData, setResData] = useState(props.serverResponse.data);
@@ -51,17 +59,27 @@ const Dashboard = (props) => {
         {props.serverResponse.data.content.days2.days[0].availablePeople[0]}
       </h1>
       <button
-          onClick={() => {
-            console.log(
-              "konsolka",
-              props.serverResponse.data.content.days2.days[0].availablePeople
-                .length
-            );
-          }}
-        >
-          Check state
+        onClick={() => {
+          console.log(
+            "konsolka",
+            props.serverResponse.data.content.days2.days[0].availablePeople
+              .length
+          );
+        }}
+      >
+        Check state
       </button>
-      <button type="button" name="cos" onClick={()=>setX("dnwio")}>Refresh</button>
+      {/* <button
+        onClick={() => {
+          if (x) {
+            setX(false);
+          } else {
+            setX(true);
+          }
+        }}
+      >
+        Refresh
+      </button> */}
       <form onSubmit={handleSubmit}>
         <label>
           Pick the date and time that you're willing to sacrifice for meeting up
@@ -76,6 +94,18 @@ const Dashboard = (props) => {
           onChange={(e) => {
             setPickedDate(e.target.value);
             console.log(e.target.value);
+          }}
+        />
+        <input
+          style={{ backgroundColor: "red" }}
+          type="datetime-local"
+          id="freeTime2"
+          name="freeTime2"
+          min={new Date()}
+          max="2021-12-31T00:00"
+          onChange={(e) => {
+            setPickedDate(e.target.value);
+            // console.log(e.target.value);
           }}
         />
         <button

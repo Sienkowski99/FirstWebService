@@ -39,12 +39,12 @@ function msc(res) {
     // .then((x) => console.log(x[0]))
     .then((found) => {
       y = found[0].months[month];
-      console.log(found);
-      console.log(found[0].months[month].days[date.getDate() - 1]);
-      console.log(found[0].months[month].days);
+      // console.log(found);
+      // console.log(found[0].months[month].days[date.getDate() - 1]);
+      // console.log(found[0].months[month].days);
       found[0].months[month].days.forEach((element) => {
         console.log(element);
-        console.log(element.availablePeople);
+        // console.log(element.availablePeople);
       });
     })
     .then((nic) => {
