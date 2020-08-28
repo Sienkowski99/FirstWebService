@@ -22,6 +22,7 @@ const LoginForm = (props) => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [userStatusLogin, setUserStatusLogin] = useState(props.userStatus);
+  const [todaysDate, setTodaysDate] = useState(new Date());
 
   const API_URL_checkuser =
     window.location.hostname === "localhost"
@@ -31,8 +32,9 @@ const LoginForm = (props) => {
   function handleSubmit(event) {
     event.preventDefault();
     console.log("Trying to log in");
+    const monthToRequest = todaysDate.getMonth()
     axios
-      .post(API_URL_checkuser, { login: login, password: password })
+      .post(API_URL_checkuser, { login: login, password: password, reqMonth: monthToRequest})
       .then((res) => {
         console.log(res);
         if (res.data.authenticated) {

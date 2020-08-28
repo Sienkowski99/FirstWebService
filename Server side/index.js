@@ -26,39 +26,39 @@ const months = [
   "December",
 ];
 
-function msc(res) {
+function msc(res, reqMonth) {
+  console.log(reqMonth)
   const date = new Date();
-  console.log(date.getDate());
   const month = date.getMonth();
   const year = date.getFullYear();
-  console.log(months[month] + " " + year);
-  let x = "";
   let y = {};
   dates
-    .find({ year: year, "months.name": months[month] })
-    // .then((x) => console.log(x[0]))
+    .find({ year: year, "months.name": months[reqMonth] })
     .then((found) => {
-      y = found[0].months[month];
-      // console.log(found);
-      // console.log(found[0].months[month].days[date.getDate() - 1]);
-      // console.log(found[0].months[month].days);
-      found[0].months[month].days.forEach((element) => {
+      if (found !== []) {
+        y = found[0].months[reqMonth];
+        found[0].months[reqMonth].days.forEach((element) => {
         console.log(element);
-        // console.log(element.availablePeople);
-      });
+        });
+        res.json({
+          existing: true,
+          authenticated: true,
+          content: y,
+          msg: "Returning required month"
+        });
+      } else {
+        res.json({
+          existing: true,
+          authenticated: true,
+          msg: "Month not in DB"
+        })
+      }
     })
-    .then((nic) => {
-      let html = {
-        title: months[month] + " " + year,
-        days2: y,
-      };
-      return res.json({
-        existing: true,
-        authenticated: true,
-        msg: "In the future there will be a list of dates",
-        content: html,
-      });
-    });
+    .catch(err=>res.json({
+      existing: true,
+      authenticated: true,
+      msg: err
+    }));
 }
 
 const db = monk("localhost:27017/firstWebService");
@@ -74,11 +74,15 @@ function dbInsertUserUpdate(
   personInitials,
   res
 ) {
+  const personWithHoursObject = {
+    personInitials: personInitials,
+    availableHours: [hours + ":" + minutes]
+  }
   dates
     .update(
       { year: year },
       {
-        $push: { "months.$[name].days.$[day].availablePeople": personInitials },
+        $push: { "months.$[name].days.$[day].availablePeople": personWithHoursObject },
       },
       { arrayFilters: [{ "name.name": months[month] }, { "day.day": day }] }
     )
@@ -90,7 +94,7 @@ function dbInsertUserUpdate(
           console.log("Returning updated dates.");
           return yearObject[0];
         })
-        .then((y) => res.json({ updatedDates: y }));
+        .then((y) => res.json({ updatedYear: y }));
     })
     .catch((err) => console.log("An error has ocurred: " + err));
   // console.log("added user to database");
@@ -149,6 +153,10 @@ app.post("/addUserToDB", (req, res) => {
   console.log(date);
 });
 
+app.post("/updateMonth", (req, res) => {
+  msc(res, req.body.reqMonth)
+})
+
 app.post("/checkuser", (req, res) => {
   console.log("Starting connection to database");
   users
@@ -163,7 +171,7 @@ app.post("/checkuser", (req, res) => {
       }
       if (resultFromDatabase[0].password === hash(req.body.password)) {
         console.log("User exists and passowrd is correct");
-        msc(res);
+        msc(res, req.body.reqMonth);
       } else {
         console.log("Password is incorrect");
         res.json({

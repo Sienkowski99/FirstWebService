@@ -10,6 +10,21 @@ const Dashboard = (props) => {
   //   width: "80%",
   // };
   // console.log(props.showUserStatus());
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   function handleSubmit(event) {
     event.preventDefault();
     axios
@@ -18,10 +33,10 @@ const Dashboard = (props) => {
         personInitials: props.userStatus.user.login,
       })
       .then((res) => {
-        console.log(props.serverResponse);
+        // console.log(props.serverResponse);
         console.log(res);
         let x = props.serverResponse;
-        x.data.content.days2 = res.data.updatedDates.months[7];
+        x.data.content = res.data.updatedYear.months[months.indexOf(props.serverResponse.data.content.name)];
         // console.log({ ...x, zmiana: true });
         props.changeServerResponse(x);
         // setX("X");
@@ -43,7 +58,40 @@ const Dashboard = (props) => {
   const [todaysDate, setTodaysDate] = useState(new Date());
   const [pickedDate, setPickedDate] = useState(new Date());
   const [resData, setResData] = useState(props.serverResponse.data);
+  const [displayedMonth, setDisplayedMonth] = useState(props.serverResponse.data.content.name)
   // const [monthWithYear, setMonthWithYear] = useState(props.month);
+  function handlePrevious() {
+    console.log("Requesting previous month")
+    const monthToRequest = months.indexOf(props.serverResponse.data.content.name)
+    //WHAT IF monthToRequest GOES BELOW 0 OR ABOVE 11
+    //NEED TO ADD PREV/NEXT YEAR FUNCTIONALITY
+    axios.post("http://127.0.0.1:8000/updateMonth", { login: props.userStatus.login, password: props.userStatus.password, reqMonth: monthToRequest-1})
+    .then((res) => {
+      console.log(res);
+      if (res.data.authenticated) {
+        props.changeServerResponse(res);
+      } else {
+        alert("User not existing");
+      }
+    })
+    .catch((err) => alert(err));
+  }
+  function handleNext() {
+    console.log("Requesting next month")
+    const monthToRequest = months.indexOf(props.serverResponse.data.content.name)
+    //WHAT IF monthToRequest GOES BELOW 0 OR ABOVE 11
+    //NEED TO ADD PREV/NEXT YEAR FUNCTIONALITY
+    axios.post("http://127.0.0.1:8000/updateMonth", { login: props.userStatus.login, password: props.userStatus.password, reqMonth: monthToRequest+1})
+    .then((res) => {
+      console.log(res);
+      if (res.data.authenticated) {
+        props.changeServerResponse(res);
+      } else {
+        alert("User not existing");
+      }
+    })
+    .catch((err) => alert(err));
+  }
   useEffect(() => {
     console.log("DASGOBIARD NOITICED DATA CHANGED");
   }, [props]);
@@ -55,31 +103,8 @@ const Dashboard = (props) => {
   return (
     <div>
       <h1>
-        {props.userStatus.status} as {props.userStatus.user.login} and{" "}
-        {props.serverResponse.data.content.days2.days[0].availablePeople[0]}
+        {props.userStatus.status} as {props.userStatus.user.login}
       </h1>
-      <button
-        onClick={() => {
-          console.log(
-            "konsolka",
-            props.serverResponse.data.content.days2.days[0].availablePeople
-              .length
-          );
-        }}
-      >
-        Check state
-      </button>
-      {/* <button
-        onClick={() => {
-          if (x) {
-            setX(false);
-          } else {
-            setX(true);
-          }
-        }}
-      >
-        Refresh
-      </button> */}
       <form onSubmit={handleSubmit}>
         <label>
           Pick the date and time that you're willing to sacrifice for meeting up
@@ -94,18 +119,6 @@ const Dashboard = (props) => {
           onChange={(e) => {
             setPickedDate(e.target.value);
             console.log(e.target.value);
-          }}
-        />
-        <input
-          style={{ backgroundColor: "red" }}
-          type="datetime-local"
-          id="freeTime2"
-          name="freeTime2"
-          min={new Date()}
-          max="2021-12-31T00:00"
-          onChange={(e) => {
-            setPickedDate(e.target.value);
-            // console.log(e.target.value);
           }}
         />
         <button
@@ -140,18 +153,20 @@ const Dashboard = (props) => {
         //   justifyContent: "space-between",
         // }}
         >
-          <button disabled>Previous</button>
-          <p>{props.serverResponse.data.content.title}</p>
-          <button disabled>Next</button>
+          <button onClick={handlePrevious}>Previous</button>
+          <p>{props.serverResponse.data.content.name}</p>
+          <button onClick={handleNext}>Next</button>
         </div>
-        {props.serverResponse.data.content.days2.days.map((element) => (
-          <div key={element.day}>
-            <h3 key={element.day}>{element.day}</h3>
+        {props.serverResponse.data.content.days.map((day) => (
+          <div key={day.day}>
+            <h3 key={day.day}>{day.day}</h3>
             <p>People willing to meet</p>
             <ul>
-              {element.availablePeople.map((el) => (
+              {day.availablePeople.map(obj => <div key={obj.personInitials}><h4>{obj.personInitials}: {obj.availableHours.map(h=> <p key={h}>{h}</p>)}</h4></div>)
+              }
+              {/* ;((el) => (
                 <p key={el}>{el}</p>
-              ))}
+              ))} */}
             </ul>
           </div>
         ))}
