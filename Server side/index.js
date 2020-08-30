@@ -4,6 +4,38 @@ const cors = require("cors");
 const monk = require("monk");
 
 const sha256 = require("js-sha256");
+const { v4: uuidv4 } = require("uuid");
+
+const nodemailer = require("nodemailer");
+
+const sendMail = (clientEmail, subject, text) => {
+  return new Promise((resolve, reject) => {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "informatyksieniu@gmail.com",
+        pass: "atpjeopujfmfhhcw",
+      },
+    });
+
+    const mailOptions = {
+      from: "informatyksieniu@gmail.com",
+      to: clientEmail,
+      subject: subject,
+      text: text,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+        reject(Error("It broke"));
+      } else {
+        console.log("Email sent: " + info.response);
+        resolve("Stuff worked!");
+      }
+    });
+  });
+};
 
 // console.log(sha256("Gładyś"));
 function hash(word) {
@@ -11,6 +43,14 @@ function hash(word) {
   return sha256(word);
 }
 // console.log(hash("SP"))
+
+console.log(uuidv4());
+
+Date.prototype.addHours = function (h) {
+  this.setHours(this.getHours() + h);
+  return this;
+};
+
 const months = [
   "January",
   "February",
@@ -78,7 +118,7 @@ function dbInsertUserUpdate(
 ) {
   const personWithHoursObject = {
     personInitials: personInitials,
-    availableHours: [hours + ":" + (minutes<10?"0"+minutes:minutes)],
+    availableHours: [hours + ":" + (minutes < 10 ? "0" + minutes : minutes)],
   };
   dates
     .update(
@@ -109,9 +149,56 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Dynamic server of 'Firends schedule'");
 });
+console.log(new Date());
+app.post("/resetRequest", (req, res) => {
+  console.log(req.body);
+  users
+    .find({ email: req.body.email })
+    .then((foundArray) => {
+      console.log(foundArray);
+      const time = new Date();
+      if (foundArray.length) {
+        console.log("user exists");
+        const token = uuidv4();
+        users
+          .update(
+            { email: req.body.email },
+            {
+              $set: {
+                "notifications.$[name]": {
+                  name: "resetData",
+                  token: token,
+                  expires: time.addHours(1),
+                },
+              },
+            },
+            { arrayFilters: [{ "name.name": "resetData" }] }
+          )
+          .then((done) => {
+            sendMail(
+              req.body.email,
+              "Password reset",
+              "To reset your password click the link >> http://localhost:8000/reset/" +
+                token
+            )
+              .then(() => {
+                console.log("Mail has been sent to: " + req.body.email);
+                res.json("user exists");
+              })
+              .catch((err) => console.log("an error has occurred"));
+          })
+          .catch((err) => console.log("an error has occurred"));
+      } else {
+        console.log("user not exists");
+        res.json("user not exists");
+      }
+    })
+    .catch((err) => console.log(err));
+});
 
-app.get("/admin", (req, res) => {
-  res.send("Admin panel will be added in the future.'");
+app.get("/reset/:token", (req, res) => {
+  let token = req.params.token;
+  res.json(token);
 });
 
 app.get("/getCurrentMonthWithDates", (req, res) => {

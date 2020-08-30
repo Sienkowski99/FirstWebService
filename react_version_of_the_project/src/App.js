@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import React, { useState, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
@@ -6,6 +7,7 @@ import RegisterForm from "./components/RegisterForm";
 import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
 import axios from "axios";
+import ForgotPassword from "./components/ForgotPassword";
 
 function App() {
   // const bodyStyle = {
@@ -76,9 +78,13 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    console.log("User status has been changed in App.js", userStatus);
-  }, [userStatus]);
+  // useEffect(() => {
+  //   // console.log("User status has been changed in App.js", props.userStatus);
+  //   // console.log(Cookies.get("userStatus"));
+  //   if (Cookies.get("userStatus") === "LOGGED_IN") {
+  //     pickComponent("Dashboard");
+  //   }
+  // });
 
   return (
     <div className="App">
@@ -130,6 +136,15 @@ function App() {
         ) : null}
         {displayedComponent === "Profile" ? (
           <Profile
+            pickComponent={pickComponent}
+            userStatus={userStatus}
+            changeUserStatus={changeUserStatus}
+            serverResponse={serverResponse}
+            changeServerResponse={changeServerResponse}
+          />
+        ) : null}
+        {displayedComponent === "ForgotPassword" ? (
+          <ForgotPassword
             pickComponent={pickComponent}
             userStatus={userStatus}
             changeUserStatus={changeUserStatus}

@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import React, { useState, useEffect } from "react";
 // import { Formik } from 'formik';
 import Dashboard from "./Dashboard";
@@ -48,6 +49,7 @@ const LoginForm = (props) => {
             },
             status: "LOGGED_IN",
           });
+          Cookies.set("userStatus", "LOGGED_IN");
           // console.log(userStatusLogin);
           // props.showUserStatus();
           // console.log(res.data);
@@ -69,12 +71,13 @@ const LoginForm = (props) => {
       .catch((err) => alert(err));
   }
   // console.log(props.userStatus);
-  const [zalogowany, setZalogowany] = useState(props.userStatus);
+  // const [zalogowany, setZalogowany] = useState(props.userStatus);
   useEffect(() => {
     // setZalogowany(props.userStatus);
     console.log("ZMIANAAAAAAAA");
     console.log(props.userStatus);
   }, [props.userStatus]);
+
   return (
     <div
       style={{
@@ -113,8 +116,16 @@ const LoginForm = (props) => {
         </button>
       </form>
       <div style={{ display: "flex" }}>
+        <p>Forgot password?</p>
+        <button onClick={() => props.pickComponent("ForgotPassword")}>
+          Reset password
+        </button>
+      </div>
+      <div style={{ display: "flex" }}>
         <p>Don't have an account yet?</p>
-        <button onClick={()=>props.pickComponent("RegisterForm")}>Register</button>
+        <button onClick={() => props.pickComponent("RegisterForm")}>
+          Register
+        </button>
       </div>
     </div>
   );

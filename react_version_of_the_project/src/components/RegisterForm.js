@@ -26,31 +26,37 @@ const LoginForm = (props) => {
           login: login,
           password: password,
           email: email,
-          })
+        })
         .then((res) => console.log(res))
-        .then(x=> {props.pickComponent("LoginForm");
-          alert("Now you have to log in")})
-        .catch((err) => console.log(err))
-        
+        .then((x) => {
+          props.pickComponent("LoginForm");
+          alert("Now you have to log in");
+        })
+        .catch((err) => console.log(err));
     } else {
-      alert("Passwords have to be the same")
+      alert("Passwords have to be the same");
     }
   }
 
   return (
-    <div style={{
-      backgroundColor: "#17b0ff",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "space-around",
-      position: "fixed",
-      width: "100%",
-      height: "100% ",
-    }}>
+    <div
+      style={{
+        backgroundColor: "#17b0ff",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "space-around",
+        position: "fixed",
+        width: "100%",
+        height: "100% ",
+      }}
+    >
       <h1>{props.userStatus.status}</h1>
       <label>Register</label>
-      <form onSubmit={handleSubmit} style={{display: "flex", flexDirection: "column"}}>
+      <form
+        onSubmit={handleSubmit}
+        style={{ display: "flex", flexDirection: "column" }}
+      >
         <label>Login</label>
         <input
           type="text"
@@ -78,8 +84,13 @@ const LoginForm = (props) => {
           value={password2}
           onChange={(e) => setPassword2(e.target.value)}
         />
-        <button type="submit">Register</button>
+        <button type="submit" onClick={handleSubmit}>
+          Register
+        </button>
       </form>
+      <button onClick={() => props.pickComponent("LoginForm")}>
+        Back to Login page
+      </button>
     </div>
   );
 };

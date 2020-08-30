@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import React, { useState, useEffect } from "react";
 const axios = require("axios");
 
@@ -53,6 +54,9 @@ const Dashboard = (props) => {
   const [todaysDate, setTodaysDate] = useState(new Date());
   const [pickedDate, setPickedDate] = useState(new Date());
   const [resData, setResData] = useState(props.serverResponse.data);
+  // const [displayedMonth, setDisplayedMonth] = useState(
+  //   props.serverResponse.data.content.name
+  // );
   const [displayedMonth, setDisplayedMonth] = useState(
     props.serverResponse.data.content.name
   );
@@ -118,6 +122,7 @@ const Dashboard = (props) => {
     props.pickComponent("LoginForm");
     props.changeServerResponse({});
     props.changeUserStatus({ user: {}, status: "NOT_LOGGED_IN" });
+    Cookies.remove("userStatus");
   }
   return (
     <div

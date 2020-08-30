@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 const axios = require("axios");
 
 const Profile = (props) => {
+  function handleFriendRequestSend(event) {
+    event.preventDefault();
+  }
   return (
     <div
       style={{
@@ -19,7 +22,9 @@ const Profile = (props) => {
       <form>
         <label>Type in friend's nickname and send friend request</label>
         <input type="text" />
-        <button type="submit">Send friend request</button>
+        <button type="submit" onClick={handleFriendRequestSend}>
+          Send friend request
+        </button>
       </form>
       <button onClick={() => props.pickComponent("Dashboard")}>
         Back to dashboard
