@@ -27,7 +27,7 @@ const months = [
 ];
 
 function msc(res, reqMonth) {
-  console.log(reqMonth)
+  console.log(reqMonth);
   const date = new Date();
   const month = date.getMonth();
   const year = date.getFullYear();
@@ -38,27 +38,29 @@ function msc(res, reqMonth) {
       if (found !== []) {
         y = found[0].months[reqMonth];
         found[0].months[reqMonth].days.forEach((element) => {
-        console.log(element);
+          console.log(element);
         });
         res.json({
           existing: true,
           authenticated: true,
           content: y,
-          msg: "Returning required month"
+          msg: "Returning required month",
         });
       } else {
         res.json({
           existing: true,
           authenticated: true,
-          msg: "Month not in DB"
-        })
+          msg: "Month not in DB",
+        });
       }
     })
-    .catch(err=>res.json({
-      existing: true,
-      authenticated: true,
-      msg: err
-    }));
+    .catch((err) =>
+      res.json({
+        existing: true,
+        authenticated: true,
+        msg: err,
+      })
+    );
 }
 
 const db = monk("localhost:27017/firstWebService");
@@ -76,13 +78,15 @@ function dbInsertUserUpdate(
 ) {
   const personWithHoursObject = {
     personInitials: personInitials,
-    availableHours: [hours + ":" + minutes]
-  }
+    availableHours: [hours + ":" + minutes],
+  };
   dates
     .update(
       { year: year },
       {
-        $push: { "months.$[name].days.$[day].availablePeople": personWithHoursObject },
+        $push: {
+          "months.$[name].days.$[day].availablePeople": personWithHoursObject,
+        },
       },
       { arrayFilters: [{ "name.name": months[month] }, { "day.day": day }] }
     )
@@ -121,6 +125,8 @@ app.post("/registerNewUser", (req, res) => {
     login: req.body.login,
     password: hash(req.body.password),
     email: req.body.email,
+    friendsList: [],
+    notifications: [],
   });
   console.log(req.body);
   console.log("New user has been added to DB");
@@ -154,8 +160,8 @@ app.post("/addUserToDB", (req, res) => {
 });
 
 app.post("/updateMonth", (req, res) => {
-  msc(res, req.body.reqMonth)
-})
+  msc(res, req.body.reqMonth);
+});
 
 app.post("/checkuser", (req, res) => {
   console.log("Starting connection to database");

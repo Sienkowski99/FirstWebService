@@ -32,9 +32,13 @@ const LoginForm = (props) => {
   function handleSubmit(event) {
     event.preventDefault();
     console.log("Trying to log in");
-    const monthToRequest = todaysDate.getMonth()
+    const monthToRequest = todaysDate.getMonth();
     axios
-      .post(API_URL_checkuser, { login: login, password: password, reqMonth: monthToRequest})
+      .post(API_URL_checkuser, {
+        login: login,
+        password: password,
+        reqMonth: monthToRequest,
+      })
       .then((res) => {
         console.log(res);
         if (res.data.authenticated) {
@@ -72,10 +76,24 @@ const LoginForm = (props) => {
     console.log(props.userStatus);
   }, [props.userStatus]);
   return (
-    <div>
+    <div
+      style={{
+        backgroundColor: "#17b0ff",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "space-around",
+        position: "fixed",
+        width: "100%",
+        height: "100% ",
+      }}
+    >
       <h1>{props.userStatus.status}</h1>
       <label>Log In</label>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        style={{ display: "flex", flexDirection: "column", width: "20%" }}
+      >
         <label>Login</label>
         <input
           type="text"
@@ -90,8 +108,14 @@ const LoginForm = (props) => {
           onChange={(e) => setPassword(e.target.value)}
         />
         {/* <br /> */}
-        <button type="submit">Log In</button>
+        <button type="submit" style={{ marginTop: "5%" }}>
+          Log In
+        </button>
       </form>
+      <div style={{ display: "flex" }}>
+        <p>Don't have an account yet?</p>
+        <button>Register</button>
+      </div>
     </div>
   );
 };

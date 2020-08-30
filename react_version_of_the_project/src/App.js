@@ -4,6 +4,7 @@ import "./App.css";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import Dashboard from "./components/Dashboard";
+import Profile from "./components/Profile";
 import axios from "axios";
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
   const [mainComponents, setMainComponents] = useState([
     "LoginForm",
     "RegisterForm",
+    "Profile",
     // "Dashboard",
   ]);
 
@@ -95,7 +97,10 @@ function App() {
         </a>
       </header> */}
       <div id="bodyContent">
-        <button onClick={() => pickComponent("next")}>
+        <button
+          onClick={() => pickComponent("next")}
+          style={{ alignSelf: "center" }}
+        >
           Switch displayed component
         </button>
         {/* <h1>{userStatus.status}</h1> */}
@@ -116,6 +121,15 @@ function App() {
         ) : null}
         {displayedComponent === "Dashboard" ? (
           <Dashboard
+            pickComponent={pickComponent}
+            userStatus={userStatus}
+            changeUserStatus={changeUserStatus}
+            serverResponse={serverResponse}
+            changeServerResponse={changeServerResponse}
+          />
+        ) : null}
+        {displayedComponent === "Profile" ? (
+          <Profile
             pickComponent={pickComponent}
             userStatus={userStatus}
             changeUserStatus={changeUserStatus}
