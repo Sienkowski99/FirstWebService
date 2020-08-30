@@ -38,10 +38,19 @@ const LoginForm = (props) => {
   }
 
   return (
-    <div>
+    <div style={{
+      backgroundColor: "#17b0ff",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "space-around",
+      position: "fixed",
+      width: "100%",
+      height: "100% ",
+    }}>
       <h1>{props.userStatus.status}</h1>
       <label>Register</label>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{display: "flex", flexDirection: "column"}}>
         <label>Login</label>
         <input
           type="text"

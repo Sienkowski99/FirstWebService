@@ -114,7 +114,7 @@ const LoginForm = (props) => {
       </form>
       <div style={{ display: "flex" }}>
         <p>Don't have an account yet?</p>
-        <button>Register</button>
+        <button onClick={()=>props.pickComponent("RegisterForm")}>Register</button>
       </div>
     </div>
   );

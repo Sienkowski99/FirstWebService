@@ -78,7 +78,7 @@ function dbInsertUserUpdate(
 ) {
   const personWithHoursObject = {
     personInitials: personInitials,
-    availableHours: [hours + ":" + minutes],
+    availableHours: [hours + ":" + (minutes<10?"0"+minutes:minutes)],
   };
   dates
     .update(

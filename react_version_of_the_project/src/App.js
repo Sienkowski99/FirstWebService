@@ -47,7 +47,7 @@ function App() {
   const [mainComponents, setMainComponents] = useState([
     "LoginForm",
     "RegisterForm",
-    "Profile",
+    // "Profile",
     // "Dashboard",
   ]);
 
