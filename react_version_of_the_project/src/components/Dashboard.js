@@ -127,21 +127,88 @@ const Dashboard = (props) => {
   return (
     <div
       style={{
-        backgroundColor: "#17b0ff",
+        // backgroundColor: "#17b0ff",
+        backgroundColor: "#131E22",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "space-around",
+        color: "white",
+        fontWeight: "bold",
+        letterSpacing: "2px",
       }}
     >
-      <h1>
-        {props.userStatus.status} as {props.userStatus.user.login}
-      </h1>
-      <div style={{ display: "flex" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-around",
+          alignItems: "center",
+          width: "100%",
+          borderBottom: "solid white 2px",
+          margin: "0",
+          padding: "20px 0",
+          // position: "absolute",
+        }}
+      >
+        <button
+          style={{
+            backgroundColor: "#e7e7e7",
+            color: "black",
+            border: "none",
+            padding: "5px 10px",
+            textAlign: "center",
+            textDecoration: "none",
+            display: "inline-block",
+            fontSize: "15px",
+            fontWeight: "bold",
+            borderRadius: "10%",
+          }}
+          onClick={() => props.pickComponent("Profile")}
+        >
+          💻 Profile
+        </button>
+        <h1 style={{ margin: "0" }} class="w3-animate-left">
+          {/* {props.userStatus.status} as {props.userStatus.user.login} */}
+          Welcome {props.userStatus.user.login}!
+        </h1>
+        <button
+          style={{
+            backgroundColor: "#e7e7e7",
+            color: "black",
+            border: "none",
+            padding: "5px 10px",
+            textAlign: "center",
+            textDecoration: "none",
+            display: "inline-block",
+            fontSize: "15px",
+            fontWeight: "bold",
+            borderRadius: "10%",
+          }}
+          onClick={() => handleLogOut()}
+        >
+          Log out ✘
+        </button>
+      </div>
+      {/* <div
+        style={{
+          display: "flex",
+          width: "10%",
+          justifyContent: "space-around",
+        }}
+      >
         <button onClick={() => handleLogOut()}>Log out</button>
         <button onClick={() => props.pickComponent("Profile")}>Profile</button>
-      </div>
-      <div style={{ display: "flex", flexDirection: "row", width: "80%" }}>
+      </div> */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          width: "95%",
+          justifyContent: "space-around",
+          margin: "25px 0",
+        }}
+      >
         <form
           onSubmit={handleSubmit}
           style={{
@@ -149,13 +216,14 @@ const Dashboard = (props) => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: "flex-start",
-            width: "30%",
+            justifyContent: "space-around",
+            width: "25%",
+            height: "25vh",
           }}
         >
           <label>
             Pick the date and time that you're willing to sacrifice for meeting
-            up with friends
+            up with friends. Everything will be updated in real time.
           </label>
           <input
             type="datetime-local"
@@ -167,21 +235,35 @@ const Dashboard = (props) => {
               setPickedDate(e.target.value);
               console.log(e.target.value);
             }}
+            style={{
+              backgroundColor: "#e7e7e7",
+              color: "black",
+              border: "none",
+              padding: "5px 10px",
+              textAlign: "center",
+              textDecoration: "none",
+              display: "inline-block",
+              fontSize: "15px",
+              fontWeight: "bold",
+              // borderRadius: "10%",
+            }}
           />
           <button
             type="submit"
-            //   style={
-            //     {
-            //       fontSize: "20px",
-            //       backgroundColor: "#114161",
-            //       textTransform: "uppercase",
-            //       fontWeight: "bold",
-            //       marginTop: "10px",
-            //       color: "white",
-            //     }
-            //   }
+            style={{
+              backgroundColor: "#e7e7e7",
+              color: "black",
+              border: "none",
+              padding: "5px 10px",
+              textAlign: "center",
+              textDecoration: "none",
+              display: "inline-block",
+              fontSize: "15px",
+              fontWeight: "bold",
+              borderRadius: "10%",
+            }}
           >
-            sacrifice
+            Sacrifice 🙏
           </button>
         </form>
         <div
@@ -192,6 +274,9 @@ const Dashboard = (props) => {
             justifyContent: "space-around",
             alignItems: "center",
             width: "40%",
+            borderLeft: "solid white 2px",
+            borderRight: "solid white 2px",
+            padding: "0 40px",
           }}
         >
           <div
@@ -199,12 +284,45 @@ const Dashboard = (props) => {
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
+              alignItems: "center",
               width: "100%",
             }}
           >
-            <button onClick={handlePrevious}>Previous</button>
+            <button
+              style={{
+                backgroundColor: "#e7e7e7",
+                color: "black",
+                border: "none",
+                padding: "5px 10px",
+                textAlign: "center",
+                textDecoration: "none",
+                display: "inline-block",
+                fontSize: "15px",
+                fontWeight: "bold",
+                borderRadius: "10%",
+              }}
+              onClick={handlePrevious}
+            >
+              🢀 Previous
+            </button>
             <h2>{props.serverResponse.data.content.name}</h2>
-            <button onClick={handleNext}>Next</button>
+            <button
+              style={{
+                backgroundColor: "#e7e7e7",
+                color: "black",
+                border: "none",
+                padding: "5px 10px",
+                textAlign: "center",
+                textDecoration: "none",
+                display: "inline-block",
+                fontSize: "15px",
+                fontWeight: "bold",
+                borderRadius: "10%",
+              }}
+              onClick={handleNext}
+            >
+              Next 🢂
+            </button>
           </div>
           {props.serverResponse.data.content.days.map((day) => (
             <div key={day.day}>
@@ -228,11 +346,19 @@ const Dashboard = (props) => {
             </div>
           ))}
         </div>
-
-        <img
-          style={{ width: "30%", height: "250px" }}
-          src="https://www.catster.com/wp-content/uploads/2018/01/An-orange-tabby-cat-with-the-M-marking-on-the-forehead.jpg"
-        />
+        <div style={{ width: "25%" }}>
+          <img src={require("../images/kociak.png")} />
+        </div>
+      </div>
+      <div
+        style={{
+          width: "100%",
+          height: "50px",
+          borderTop: "solid white 2px",
+          paddingLeft: "10%",
+        }}
+      >
+        <p>© Siennicznik 2020 </p>
       </div>
     </div>
   );

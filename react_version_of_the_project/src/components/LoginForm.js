@@ -64,7 +64,7 @@ const LoginForm = (props) => {
 
           // }
         } else {
-          alert("User not existing");
+          alert(res.data.msg);
         }
       })
       // .then((x) => console.log(userStatusLogin))
@@ -81,7 +81,8 @@ const LoginForm = (props) => {
   return (
     <div
       style={{
-        backgroundColor: "#17b0ff",
+        // backgroundColor: "#17b0ff",
+        backgroundColor: "#131E22",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -89,43 +90,113 @@ const LoginForm = (props) => {
         position: "fixed",
         width: "100%",
         height: "100% ",
+        color: "white",
+        fontWeight: "bold",
+        letterSpacing: "2px",
       }}
     >
-      <h1>{props.userStatus.status}</h1>
-      <label>Log In</label>
+      {/* <h1>{props.userStatus.status}</h1> */}
+      <h1 style={{ fontSize: "80px" }}>Friends Schedule</h1>
       <form
         onSubmit={handleSubmit}
-        style={{ display: "flex", flexDirection: "column", width: "20%" }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "20%",
+          alignItems: "center",
+        }}
       >
-        <label>Login</label>
+        <label style={{ marginBottom: "5px", marginTop: "5px" }}>Login</label>
         <input
           type="text"
           value={login}
           onChange={(e) => setLogin(e.target.value)}
         />
         {/* <br /> */}
-        <label>Password</label>
+        <label style={{ marginBottom: "5px", marginTop: "5px" }}>
+          Password
+        </label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         {/* <br /> */}
-        <button type="submit" style={{ marginTop: "5%" }}>
+        <button
+          type="submit"
+          style={{
+            marginTop: "30px",
+            backgroundColor: "#e7e7e7",
+            color: "black",
+            border: "none",
+            padding: "2px 10px",
+            textAlign: "center",
+            textDecoration: "none",
+            display: "inline-block",
+            fontSize: "15px",
+            fontWeight: "bold",
+            borderRadius: "5%",
+          }}
+        >
           Log In
         </button>
       </form>
-      <div style={{ display: "flex" }}>
-        <p>Forgot password?</p>
-        <button onClick={() => props.pickComponent("ForgotPassword")}>
-          Reset password
-        </button>
-      </div>
-      <div style={{ display: "flex" }}>
-        <p>Don't have an account yet?</p>
-        <button onClick={() => props.pickComponent("RegisterForm")}>
-          Register
-        </button>
+      <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <p>Forgot password?</p>
+          <button
+            style={{
+              marginLeft: "20px",
+              backgroundColor: "#e7e7e7",
+              color: "black",
+              border: "none",
+              padding: "2px 5px",
+              textAlign: "center",
+              textDecoration: "none",
+              display: "inline-block",
+              fontSize: "15px",
+              fontWeight: "bold",
+              borderRadius: "5%",
+            }}
+            onClick={() => props.pickComponent("ForgotPassword")}
+          >
+            Reset password
+          </button>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <p>Don't have an account yet?</p>
+          <button
+            // style={{ marginLeft: "10px" }}
+            style={{
+              marginLeft: "20px",
+              backgroundColor: "#e7e7e7",
+              color: "black",
+              border: "none",
+              padding: "2px 5px",
+              textAlign: "center",
+              textDecoration: "none",
+              display: "inline-block",
+              fontSize: "15px",
+              fontWeight: "bold",
+              borderRadius: "5%",
+            }}
+            onClick={() => props.pickComponent("RegisterForm")}
+          >
+            Register
+          </button>
+        </div>
       </div>
     </div>
   );

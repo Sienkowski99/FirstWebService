@@ -44,7 +44,7 @@ function hash(word) {
 }
 // console.log(hash("SP"))
 
-console.log(uuidv4());
+// console.log(uuidv4());
 
 Date.prototype.addHours = function (h) {
   this.setHours(this.getHours() + h);
@@ -178,29 +178,60 @@ app.post("/resetRequest", (req, res) => {
             sendMail(
               req.body.email,
               "Password reset",
-              "To reset your password click the link >> http://localhost:8000/reset/" +
+              "To reset your password go to the link >> http://localhost:3000 >> and type in code: " +
                 token
             )
               .then(() => {
                 console.log("Mail has been sent to: " + req.body.email);
-                res.json("user exists");
+                res.json("Email has been sent");
               })
               .catch((err) => console.log("an error has occurred"));
           })
           .catch((err) => console.log("an error has occurred"));
       } else {
         console.log("user not exists");
-        res.json("user not exists");
+        res.json("User not exists");
       }
     })
     .catch((err) => console.log(err));
 });
 
-app.get("/reset/:token", (req, res) => {
+app.post("/reset/:token", (req, res) => {
   let token = req.params.token;
+  console.log(token);
+  users
+    .find({ "notifications.token": token })
+    .then((res) => {
+      console.log(res);
+      if (res.length) {
+        const actualDate = new Date();
+        console.log(actualDate);
+        const dateOfCode = res[0].notifications.filter(
+          (notification) => notification.name === "resetData"
+        )[0].expires;
+        console.log(dateOfCode);
+        if (actualDate < dateOfCode) {
+          users
+            .update(
+              { "notifications.token": token },
+              {
+                $set: {
+                  password: hash(req.body.newPassword),
+                },
+              }
+            )
+            .then((x) => res.json("Password has been updated"))
+            .catch((err) => console.log(err));
+        } else {
+          res.json("Secret code has expired! Generate new one");
+        }
+      } else {
+        res.json("Secret code is invalid");
+      }
+    })
+    .catch((err) => console.log(err));
   res.json(token);
 });
-
 app.get("/getCurrentMonthWithDates", (req, res) => {
   res.json({
     msg: "BLABLA",

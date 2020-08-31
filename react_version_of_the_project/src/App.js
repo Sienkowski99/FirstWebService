@@ -20,18 +20,18 @@ function App() {
   //   width: "100%",
   //   height: "100%",
   // };
-  // constructor() {
-  //   super()
-  //   this.state = {
-  //     user: {},
-  //     status: "NOT_LOGGED_IN",
-  //   }
-  // }
 
   const [userStatus, setUserStatus] = useState({
     user: {},
     status: "NOT_LOGGED_IN",
   });
+
+  // const [auth, setAuth] = useEffect()
+  // useEffect(()=>{
+  //   if (auth === "LOGGED_IN") {
+  //     setUserStatus({})
+  //   }
+  // })
 
   const [serverResponse, setServerResponse] = useState({});
   // checkOginStatus() {
@@ -81,7 +81,8 @@ function App() {
   // useEffect(() => {
   //   // console.log("User status has been changed in App.js", props.userStatus);
   //   // console.log(Cookies.get("userStatus"));
-  //   if (Cookies.get("userStatus") === "LOGGED_IN") {
+  //   const stateFromCookie = Cookies.get("userStatus");
+  //   if (stateFromCookie === "LOGGED_IN") {
   //     pickComponent("Dashboard");
   //   }
   // });
@@ -103,12 +104,12 @@ function App() {
         </a>
       </header> */}
       <div id="bodyContent">
-        <button
+        {/* <button
           onClick={() => pickComponent("next")}
           style={{ alignSelf: "center" }}
         >
           Switch displayed component
-        </button>
+        </button> */}
         {/* <h1>{userStatus.status}</h1> */}
         {displayedComponent === "LoginForm" ? (
           <LoginForm
