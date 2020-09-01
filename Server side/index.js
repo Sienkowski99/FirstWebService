@@ -201,12 +201,12 @@ app.post("/reset/:token", (req, res) => {
   console.log(token);
   users
     .find({ "notifications.token": token })
-    .then((res) => {
-      console.log(res);
-      if (res.length) {
+    .then((resp) => {
+      console.log(resp);
+      if (resp.length) {
         const actualDate = new Date();
         console.log(actualDate);
-        const dateOfCode = res[0].notifications.filter(
+        const dateOfCode = resp[0].notifications.filter(
           (notification) => notification.name === "resetData"
         )[0].expires;
         console.log(dateOfCode);
@@ -220,17 +220,20 @@ app.post("/reset/:token", (req, res) => {
                 },
               }
             )
-            .then((x) => res.json("Password has been updated"))
+            .then((x) => {
+              return "Password has been updated";
+            })
             .catch((err) => console.log(err));
         } else {
-          res.json("Secret code has expired! Generate new one");
+          return "Secret code has expired! Generate new one";
         }
       } else {
-        res.json("Secret code is invalid");
+        return "Secret code is invalid";
       }
     })
+    .then((x) => res.json(x))
     .catch((err) => console.log(err));
-  res.json(token);
+  // res.json(token);
 });
 app.get("/getCurrentMonthWithDates", (req, res) => {
   res.json({

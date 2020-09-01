@@ -20,7 +20,8 @@ const ForgotPassword = (props) => {
       const API_adress = "http://localhost:8000/reset/" + enteredCode;
       axios
         .post(API_adress, { newPassword })
-        .then((response) => console.log(response));
+        .then((response) => alert(response.data))
+        .catch((err) => console.log(err));
     } else {
       alert("Passwords don't match!");
     }
