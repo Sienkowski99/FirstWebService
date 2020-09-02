@@ -43,12 +43,15 @@ const LoginForm = (props) => {
       .then((res) => {
         console.log(res);
         if (res.data.authenticated) {
+          console.log("odp", res);
           props.changeUserStatus({
             user: {
               login: login,
+              friends: res.data.personalData.friendsList,
             },
             status: "LOGGED_IN",
           });
+          console.log(res.data.personalData);
           Cookies.set("userStatus", "LOGGED_IN");
           // console.log(userStatusLogin);
           // props.showUserStatus();

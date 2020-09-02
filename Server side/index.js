@@ -66,12 +66,13 @@ const months = [
   "December",
 ];
 
-function msc(res, reqMonth) {
+function msc(res, reqMonth, resFromDB) {
   console.log(reqMonth);
   const date = new Date();
   const month = date.getMonth();
   const year = date.getFullYear();
   let y = {};
+  console.log(resFromDB);
   dates
     .find({ year: year, "months.name": months[reqMonth] })
     .then((found) => {
@@ -85,6 +86,7 @@ function msc(res, reqMonth) {
           authenticated: true,
           content: y,
           msg: "Returning required month",
+          personalData: resFromDB,
         });
       } else {
         res.json({
@@ -247,11 +249,15 @@ app.post("/registerNewUser", (req, res) => {
     password: hash(req.body.password),
     email: req.body.email,
     friendsList: [],
-    notifications: [],
+    notifications: [{ name: "friendRequests", from: {} }],
   });
   console.log(req.body);
   console.log("New user has been added to DB");
   res.json("New user has been added to DB");
+});
+
+app.post("/sendFriendRequest", (req, res) => {
+  console.log(req.body);
 });
 
 function adminUpdate() {
@@ -281,7 +287,9 @@ app.post("/addUserToDB", (req, res) => {
 });
 
 app.post("/updateMonth", (req, res) => {
-  msc(res, req.body.reqMonth);
+  console.log(req.body);
+  console.log("recived request of updating month " + req.body.personalData);
+  msc(res, req.body.reqMonth, req.body.personalData);
 });
 
 app.post("/checkuser", (req, res) => {
@@ -289,6 +297,7 @@ app.post("/checkuser", (req, res) => {
   users
     .find({ login: req.body.login })
     .then((resultFromDatabase) => {
+      console.log("found user: " + resultFromDatabase);
       if (resultFromDatabase === []) {
         res.json({
           existing: false,
@@ -298,7 +307,7 @@ app.post("/checkuser", (req, res) => {
       }
       if (resultFromDatabase[0].password === hash(req.body.password)) {
         console.log("User exists and passowrd is correct");
-        msc(res, req.body.reqMonth);
+        msc(res, req.body.reqMonth, resultFromDatabase[0]);
       } else {
         console.log("Password is incorrect");
         res.json({

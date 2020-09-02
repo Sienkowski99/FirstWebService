@@ -72,52 +72,55 @@ const Profile = (props) => {
         {props.userStatus.status} as {props.userStatus.user.login}
         Your profile {props.userStatus.user.login}!
       </h1> */}
-      <form
+      <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          height: "15vh",
-          justifyContent: "space-between",
+          justifyContent: "space-around",
+          width: "100%",
         }}
       >
-        <label>Type in friend's nickname and send friend request</label>
-        <input type="text" />
-        <button
-          type="submit"
+        <div
           style={{
-            backgroundColor: "#e7e7e7",
-            color: "black",
-            border: "none",
-            padding: "5px 10px",
-            textAlign: "center",
-            textDecoration: "none",
-            display: "inline-block",
-            fontSize: "15px",
-            fontWeight: "bold",
-            borderRadius: "5%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
           }}
-          onClick={handleFriendRequestSend}
         >
-          Send friend request
-        </button>
-      </form>
-      {/* <button
-        style={{
-          backgroundColor: "#e7e7e7",
-          color: "black",
-          border: "none",
-          padding: "5px 10px",
-          textAlign: "center",
-          textDecoration: "none",
-          display: "inline-block",
-          fontSize: "15px",
-          fontWeight: "bold",
-          borderRadius: "5%",
-        }}
-        onClick={() => props.pickComponent("Dashboard")}
-      >
-        Back to dashboard
-      </button> */}
+          <p>Your friends list</p>
+          {props.serverResponse.data.personalData.friendsList.map((friend) => (
+            <p key={friend}>{friend}</p>
+          ))}
+        </div>
+        <form
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            height: "15vh",
+            justifyContent: "space-between",
+          }}
+        >
+          <label>Type in friend's nickname and send friend request</label>
+          <input type="text" />
+          <button
+            type="submit"
+            style={{
+              backgroundColor: "#e7e7e7",
+              color: "black",
+              border: "none",
+              padding: "5px 10px",
+              textAlign: "center",
+              textDecoration: "none",
+              display: "inline-block",
+              fontSize: "15px",
+              fontWeight: "bold",
+              borderRadius: "5%",
+            }}
+            onClick={handleFriendRequestSend}
+          >
+            Send friend request
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

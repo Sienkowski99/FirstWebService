@@ -57,6 +57,7 @@ const Dashboard = (props) => {
   // const [displayedMonth, setDisplayedMonth] = useState(
   //   props.serverResponse.data.content.name
   // );
+  console.log(props.serverResponse);
   const [displayedMonth, setDisplayedMonth] = useState(
     props.serverResponse.data.content.name
   );
@@ -72,11 +73,13 @@ const Dashboard = (props) => {
     }
     //WHAT IF monthToRequest GOES BELOW 0 OR ABOVE 11
     //NEED TO ADD PREV/NEXT YEAR FUNCTIONALITY
+    console.log(props.serverResponse);
     axios
       .post("http://127.0.0.1:8000/updateMonth", {
         login: props.userStatus.login,
         password: props.userStatus.password,
         reqMonth: monthToRequest - 1,
+        personalData: props.serverResponse.data.personalData,
       })
       .then((res) => {
         console.log(res);
@@ -104,6 +107,7 @@ const Dashboard = (props) => {
         login: props.userStatus.login,
         password: props.userStatus.password,
         reqMonth: monthToRequest + 1,
+        personalData: props.serverResponse.data.personalData,
       })
       .then((res) => {
         console.log(res);
