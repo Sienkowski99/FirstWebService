@@ -4,12 +4,53 @@ const axios = require("axios");
 const Profile = (props) => {
   function handleFriendRequestSend(event) {
     event.preventDefault();
-    console.log("you want to invite: ", personToInvite)
-    axios.post("http://127.0.0.1:8000/sendFriendRequest", {user: props.userStatus.user.login,
-      personToInvite: personToInvite 
-    }).then(res=>console.log(res)).catch(err=>console.log(err))
+    console.log("you want to invite: ", personToInvite);
+    axios
+      .post("http://127.0.0.1:8000/sendFriendRequest", {
+        user: props.userStatus.user.login,
+        personToInvite: personToInvite,
+      })
+      .then((res) => alert(res.data))
+      .catch((err) => console.log(err));
   }
-  const [personToInvite, setPersonToInvite] = useState("")
+  function handleAcceptFriendRequest(name) {
+    // event.preventDefault();
+    console.log("accepting friend request from " + name);
+    axios
+      .post("http://127.0.0.1:8000/acceptFriendRequest", {
+        user: props.userStatus.user.login,
+        personToAccept: name,
+      })
+      .then((res) => {
+        console.log(res.data);
+        const newPersonalData = res.data;
+        let newResponse = props.serverResponse;
+        newResponse.data.personalData = res.data;
+        props.changeServerResponse(newResponse);
+      })
+      .then(() => setX("X"))
+      .catch((err) => console.log(err));
+  }
+  function handleRejectFriendRequest(name) {
+    // event.preventDefault();
+    console.log("accepting friend request from " + name);
+    axios
+      .post("http://127.0.0.1:8000/rejectFriendRequest", {
+        user: props.userStatus.user.login,
+        personToReject: name,
+      })
+      .then((res) => {
+        console.log(res.data);
+        const newPersonalData = res.data;
+        let newResponse = props.serverResponse;
+        newResponse.data.personalData = res.data;
+        props.changeServerResponse(newResponse);
+      })
+      .then(() => setX("X"))
+      .catch((err) => console.log(err));
+  }
+  const [personToInvite, setPersonToInvite] = useState("");
+  const [x, setX] = useState("x");
   return (
     <div
       // style={{
@@ -93,7 +134,7 @@ const Profile = (props) => {
         >
           <p>Your friends list:</p>
           {props.serverResponse.data.personalData.friendsList.map((friend) => (
-            <p key={friend}>- {friend}</p>
+            <p key={friend}>➡ {friend}</p>
           ))}
         </div>
         <div
@@ -104,6 +145,60 @@ const Profile = (props) => {
           }}
         >
           <p>People that want to make friends with you:</p>
+          {props.serverResponse.data.personalData.notifications
+            .filter((notification) => notification.name === "friendRequests")[0]
+            .from.filter((o) => o.state === "pending")
+            .map((friendReq) => (
+              <div
+                key={friendReq.name}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <p key={friendReq.name}>➡ {friendReq.name}</p>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <button
+                    style={{
+                      border: "solid white 1px",
+                      backgroundColor: "green",
+                      borderRadius: "5px",
+                    }}
+                    onClick={() => handleAcceptFriendRequest(friendReq.name)}
+                  >
+                    ✔
+                  </button>
+                  <div style={{ width: "5px" }}></div>
+                  <button
+                    style={{
+                      border: "solid white 1px",
+                      backgroundColor: "red",
+                      borderRadius: "5px",
+                    }}
+                    onClick={() => handleRejectFriendRequest(friendReq.name)}
+                  >
+                    ✖
+                  </button>
+                </div>
+              </div>
+            ))}
+          {/* <button
+            onClick={() => {
+              console.log(
+                
+              );
+            }}
+          >
+            dawdawdawd
+          </button> */}
         </div>
         <form
           style={{
@@ -114,7 +209,12 @@ const Profile = (props) => {
           }}
         >
           <label>Type in friend's nickname and send friend request</label>
-          <input type="text" onChange={(e)=>{setPersonToInvite(e.target.value)}}/>
+          <input
+            type="text"
+            onChange={(e) => {
+              setPersonToInvite(e.target.value);
+            }}
+          />
           <button
             type="submit"
             style={{

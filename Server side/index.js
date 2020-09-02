@@ -79,7 +79,7 @@ function msc(res, reqMonth, resFromDB) {
       if (found !== []) {
         y = found[0].months[reqMonth];
         found[0].months[reqMonth].days.forEach((element) => {
-          console.log(element);
+          // console.log(element);
         });
         res.json({
           existing: true,
@@ -249,15 +249,173 @@ app.post("/registerNewUser", (req, res) => {
     password: hash(req.body.password),
     email: req.body.email,
     friendsList: [],
-    notifications: [{ name: "friendRequests", from: {} }],
+    notifications: [{ name: "friendRequests", from: [] }],
   });
   console.log(req.body);
   console.log("New user has been added to DB");
   res.json("New user has been added to DB");
 });
-
+app.post("/acceptFriendRequest", (req, res) => {
+  console.log("accpeting someone " + JSON.stringify(req.body));
+  console.log(req.body.personToAccept);
+  users.find({ login: req.body.user }).then((resp) => {
+    if (resp.length) {
+      users
+        .update(
+          { login: req.body.user },
+          { $addToSet: { friendsList: req.body.personToAccept } }
+        )
+        .then(
+          console.log(
+            "added " +
+              req.body.personToAccept +
+              " to " +
+              req.body.user +
+              " friends list"
+          )
+        )
+        .then(() => {
+          users
+            .update(
+              { login: req.body.personToAccept },
+              { $addToSet: { friendsList: req.body.user } }
+            )
+            .then(
+              console.log(
+                "added " +
+                  req.body.user +
+                  " to " +
+                  req.body.personToAccept +
+                  " friends list"
+              )
+            );
+        })
+        .then(() => {
+          users.update(
+            { login: req.body.user },
+            {
+              $set: {
+                "notifications.$[name].from.$[name2]": {
+                  name: req.body.personToAccept,
+                  state: "accepted",
+                },
+              },
+            },
+            {
+              arrayFilters: [
+                { "name.name": "friendRequests" },
+                { "name2.name": req.body.personToAccept },
+              ],
+            }
+          );
+        })
+        .then(() => {
+          users
+            .find({ login: req.body.user })
+            .then((personArray) => res.json(personArray[0]));
+        });
+    } else {
+      res.json("User error");
+    }
+  });
+});
+app.post("/rejectFriendRequest", (req, res) => {
+  users.find({ login: req.body.user }).then((resp) => {
+    if (resp.length) {
+      users
+        .update(
+          { login: req.body.user },
+          {
+            $set: {
+              "notifications.$[name].from.$[name2]": {
+                name: req.body.personToReject,
+                state: "rejected",
+              },
+            },
+          },
+          {
+            arrayFilters: [
+              { "name.name": "friendRequests" },
+              { "name2.name": req.body.personToReject },
+            ],
+          }
+        )
+        // .then((x) => {
+        //   console.log(
+        //     "Friend request from " +
+        //       req.body.personToReject +
+        //       " has been rejected"
+        //   );
+        //   res.json(
+        //     "Friend request from " +
+        //       req.body.personToReject +
+        //       " has been rejected"
+        //   );
+        // })
+        .then(() => {
+          console.log(
+            "Friend request from " +
+              req.body.personToReject +
+              " has been rejected"
+          );
+          users.find({ login: req.body.user }).then((personArray) => {
+            res.json(personArray[0]);
+          });
+        });
+    } else {
+      res.json("User error");
+    }
+  });
+});
 app.post("/sendFriendRequest", (req, res) => {
   console.log(req.body);
+  users.find({ login: req.body.personToInvite }).then((result) => {
+    if (result.length) {
+      // console.log(
+      //   result[0].notifications.filter((x) => x.name === "friendRequests")[0]
+      //     .from.filter((o)=>o.)
+      // );
+      console.log(
+        result[0].notifications
+          .filter((x) => x.name === "friendRequests")[0]
+          .from.filter((o) => o.name === req.body.user)
+      );
+      if (
+        result[0].notifications
+          .filter((x) => x.name === "friendRequests")[0]
+          .from.filter((o) => o.name === req.body.user).length
+      ) {
+        res.json("You have already invited that person");
+      } else {
+        users.find({ login: req.body.personToInvite }).then((foundDB) => {
+          if (foundDB.length) {
+            users
+              .update(
+                { login: req.body.personToInvite },
+                {
+                  $push: {
+                    "notifications.$[name].from": {
+                      name: req.body.user,
+                      state: "pending",
+                    },
+                  },
+                },
+                { arrayFilters: [{ "name.name": "friendRequests" }] }
+              )
+              .then((x) => {
+                console.log(x);
+                res.json("Friend request has been sent");
+              })
+              .catch((err) => console.log(err));
+          } else {
+            res.json("User has not been found");
+          }
+        });
+      }
+    } else {
+      res.json("User has not been found");
+    }
+  });
 });
 
 app.post("/addUserToDB", (req, res) => {
