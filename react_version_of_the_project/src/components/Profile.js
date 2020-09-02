@@ -4,7 +4,12 @@ const axios = require("axios");
 const Profile = (props) => {
   function handleFriendRequestSend(event) {
     event.preventDefault();
+    console.log("you want to invite: ", personToInvite)
+    axios.post("http://127.0.0.1:8000/sendFriendRequest", {user: props.userStatus.user.login,
+      personToInvite: personToInvite 
+    }).then(res=>console.log(res)).catch(err=>console.log(err))
   }
+  const [personToInvite, setPersonToInvite] = useState("")
   return (
     <div
       // style={{
@@ -86,10 +91,19 @@ const Profile = (props) => {
             justifyContent: "center",
           }}
         >
-          <p>Your friends list</p>
+          <p>Your friends list:</p>
           {props.serverResponse.data.personalData.friendsList.map((friend) => (
-            <p key={friend}>{friend}</p>
+            <p key={friend}>- {friend}</p>
           ))}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
+          <p>People that want to make friends with you:</p>
         </div>
         <form
           style={{
@@ -100,7 +114,7 @@ const Profile = (props) => {
           }}
         >
           <label>Type in friend's nickname and send friend request</label>
-          <input type="text" />
+          <input type="text" onChange={(e)=>{setPersonToInvite(e.target.value)}}/>
           <button
             type="submit"
             style={{

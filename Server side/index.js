@@ -260,10 +260,6 @@ app.post("/sendFriendRequest", (req, res) => {
   console.log(req.body);
 });
 
-function adminUpdate() {
-  // dates.insert(jedjed);
-}
-adminUpdate();
 app.post("/addUserToDB", (req, res) => {
   const date = new Date(req.body.date);
   console.log(
