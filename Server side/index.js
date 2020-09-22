@@ -116,34 +116,81 @@ function dbInsertUserUpdate(
   hours,
   minutes,
   personInitials,
+  msg,
   res
 ) {
+  const time =
+    (hours < 10 ? "0" + hours : hours) +
+    ":" +
+    (minutes < 10 ? "0" + minutes : minutes);
+  const changedTimeObject = { time, msg };
   const personWithHoursObject = {
     personInitials: personInitials,
-    availableHours: [hours + ":" + (minutes < 10 ? "0" + minutes : minutes)],
+    availableHours: [changedTimeObject],
   };
-  dates
-    .update(
-      { year: year },
-      {
-        $push: {
-          "months.$[name].days.$[day].availablePeople": personWithHoursObject,
-        },
-      },
-      { arrayFilters: [{ "name.name": months[month] }, { "day.day": day }] }
-    )
-    .then((y) => {
-      console.log("Added user's date successfuly");
+  dates.find({ year: year }).then((dbRes) => {
+    console.log(
+      dbRes[0].months[month].days
+        .filter((x) => x.day == day)[0]
+        .availablePeople.filter((z) => z.personInitials == personInitials)
+    );
+    if (
+      dbRes[0].months[month].days
+        .filter((x) => x.day == day)[0]
+        .availablePeople.filter((z) => z.personInitials == personInitials)
+        .length
+    ) {
       dates
-        .find({ year: new Date().getFullYear() })
-        .then((yearObject) => {
-          console.log("Returning updated dates.");
-          return yearObject[0];
+        .update(
+          { year: year },
+          {
+            $push: {
+              "months.$[name].days.$[day].availablePeople.$[person].availableHours": changedTimeObject,
+            },
+          },
+          {
+            arrayFilters: [
+              { "name.name": months[month] },
+              { "day.day": day },
+              { "person.personInitials": personInitials },
+            ],
+          }
+        )
+        .then((y) => {
+          console.log("Added another hour for user");
+          dates
+            .find({ year: new Date().getFullYear() })
+            .then((yearObject) => {
+              console.log("Returning updated dates.");
+              return yearObject[0];
+            })
+            .then((y) => res.json({ updatedYear: y }));
         })
-        .then((y) => res.json({ updatedYear: y }));
-    })
-    .catch((err) => console.log("An error has ocurred: " + err));
-  // console.log("added user to database");
+        .catch((err) => console.log("An error has ocurred: " + err));
+    } else {
+      dates
+        .update(
+          { year: year },
+          {
+            $push: {
+              "months.$[name].days.$[day].availablePeople": personWithHoursObject,
+            },
+          },
+          { arrayFilters: [{ "name.name": months[month] }, { "day.day": day }] }
+        )
+        .then((y) => {
+          console.log("Added user's date successfuly");
+          dates
+            .find({ year: new Date().getFullYear() })
+            .then((yearObject) => {
+              console.log("Returning updated dates.");
+              return yearObject[0];
+            })
+            .then((y) => res.json({ updatedYear: y }));
+        })
+        .catch((err) => console.log("An error has ocurred: " + err));
+    }
+  });
 }
 // dbInsertUserUpdate();
 app.use(cors());
@@ -435,6 +482,7 @@ app.post("/addUserToDB", (req, res) => {
     date.getHours(),
     date.getMinutes(),
     req.body.personInitials,
+    req.body.msg,
     res
   );
   console.log(date);

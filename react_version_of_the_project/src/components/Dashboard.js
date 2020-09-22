@@ -25,12 +25,17 @@ const Dashboard = (props) => {
     "December",
   ];
 
+  function handleRemoveHour(hour, day) {
+    console.log(hour + " " + day);
+  }
   function handleSubmit(event) {
     event.preventDefault();
+    event.target.reset();
     axios
       .post("http://127.0.0.1:8000/addUserToDB", {
         date: pickedDate,
         personInitials: props.userStatus.user.login,
+        msg: msgToDate,
       })
       .then((res) => {
         console.log(res);
@@ -53,6 +58,7 @@ const Dashboard = (props) => {
   const [x, setX] = useState(true);
   const [todaysDate, setTodaysDate] = useState(new Date());
   const [pickedDate, setPickedDate] = useState(new Date());
+  const [msgToDate, setMsgToDate] = useState("");
   const [resData, setResData] = useState(props.serverResponse.data);
   // const [displayedMonth, setDisplayedMonth] = useState(
   //   props.serverResponse.data.content.name
@@ -91,6 +97,7 @@ const Dashboard = (props) => {
       })
       .catch((err) => alert(err));
   }
+
   function handleNext() {
     console.log("Requesting next month");
     const monthToRequest = months.indexOf(
@@ -222,7 +229,7 @@ const Dashboard = (props) => {
             alignItems: "center",
             justifyContent: "space-around",
             width: "25%",
-            height: "25vh",
+            height: "35vh",
           }}
         >
           <label>
@@ -250,6 +257,18 @@ const Dashboard = (props) => {
               fontSize: "15px",
               fontWeight: "bold",
               // borderRadius: "10%",
+              // marginTop: "10px",
+            }}
+          />
+          <label>
+            You can add a comment - for exapmle - how much time you'd like to
+            spend or what's your idea for a meeting.
+          </label>
+          <input
+            type="text"
+            style={{ width: "75%" }}
+            onChange={(e) => {
+              setMsgToDate(e.target.value);
             }}
           />
           <button
@@ -329,24 +348,139 @@ const Dashboard = (props) => {
             </button>
           </div>
           {props.serverResponse.data.content.days.map((day) => (
-            <div key={day.day}>
-              <h3 key={day.day}>{day.day}</h3>
-              <p>People willing to meet</p>
-              <ul>
-                {day.availablePeople.map((obj) => (
-                  <div key={obj.personInitials}>
-                    <h4>
-                      {obj.personInitials}:{" "}
-                      {obj.availableHours.map((h) => (
-                        <p key={h}>{h}</p>
-                      ))}
-                    </h4>
-                  </div>
-                ))}
-                {/* ;((el) => (
-                  <p key={el}>{el}</p>
-                ))} */}
-              </ul>
+            <div
+              key={day.day}
+              style={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                border: "solid white 1px",
+                padding: "2%",
+                margin: "10px 0",
+                backgroundColor: "#273033",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  margin: "0",
+                  padding: "0",
+                }}
+              >
+                <h3
+                  key={day.day}
+                  style={{
+                    // marginRight: "10%",
+                    // paddingLeft: "5%",
+                    // margin: "0 10px",
+                    width: "10%",
+                    textAlign: "center",
+                  }}
+                >
+                  {day.day}
+                </h3>
+                <h4 style={{ margin: "0" }}>People willing to meet:</h4>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginLeft: "10%",
+                }}
+              >
+                {day.availablePeople
+                  .filter(
+                    (person) =>
+                      person.personInitials === props.userStatus.user.login
+                  )
+                  .map((obj) => (
+                    <div key={obj.personInitials}>
+                      <p style={{ fontSize: "18px" }}>
+                        YOU:{" "}
+                        {obj.availableHours.map((h) => (
+                          <div
+                            style={{ display: "flex", flexDirection: "row" }}
+                          >
+                            <button
+                              style={{
+                                background: "none",
+                                border: "none",
+                              }}
+                              onClick={() => handleRemoveHour(h.time, day.day)}
+                            >
+                              ❌
+                            </button>
+                            <h4 key={h.time}>
+                              🕒 {h.time}, 💬 {h.msg}
+                            </h4>
+                            <button
+                              style={{
+                                alignSelf: "flex-end",
+                                background: "none",
+                                border: "none",
+                              }}
+                            >
+                              👍
+                            </button>
+                            <button
+                              style={{
+                                alignSelf: "flex-end",
+                                background: "none",
+                                border: "none",
+                              }}
+                            >
+                              👎
+                            </button>
+                          </div>
+                        ))}
+                      </p>
+                    </div>
+                  ))}
+                {/* showing other people */}
+                {day.availablePeople
+                  .filter(
+                    (person) =>
+                      person.personInitials !== props.userStatus.user.login
+                  )
+                  .map((obj) => (
+                    <div key={obj.personInitials}>
+                      <p style={{ fontSize: "18px" }}>
+                        {obj.personInitials}:{" "}
+                        {obj.availableHours.map((h) => (
+                          <div
+                            style={{ display: "flex", flexDirection: "row" }}
+                          >
+                            <h4 key={h.time}>
+                              🕒 {h.time}, 💬 {h.msg}
+                            </h4>
+                            <button
+                              style={{
+                                alignSelf: "flex-end",
+                                background: "none",
+                                border: "none",
+                              }}
+                            >
+                              👍
+                            </button>
+                            <button
+                              style={{
+                                alignSelf: "flex-end",
+                                background: "none",
+                                border: "none",
+                              }}
+                            >
+                              👎
+                            </button>
+                          </div>
+                        ))}
+                      </p>
+                    </div>
+                  ))}
+              </div>
             </div>
           ))}
         </div>
