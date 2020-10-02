@@ -25,8 +25,14 @@ const Dashboard = (props) => {
     "December",
   ];
 
-  function handleRemoveHour(hour, day) {
-    console.log(hour + " " + day);
+  function handleRemoveHour(hour, day, month) {
+    axios.post("http://127.0.0.1:8000/removeDate", {
+      hour: hour,
+      day: day,
+      month: month,
+      user: props.userStatus.user.login,
+    });
+    console.log(hour + " " + day + " " + month);
   }
   function handleSubmit(event) {
     event.preventDefault();
@@ -410,14 +416,20 @@ const Dashboard = (props) => {
                                 background: "none",
                                 border: "none",
                               }}
-                              onClick={() => handleRemoveHour(h.time, day.day)}
+                              onClick={() =>
+                                handleRemoveHour(
+                                  h.time,
+                                  day.day,
+                                  props.serverResponse.data.content.name
+                                )
+                              }
                             >
                               ❌
                             </button>
                             <h4 key={h.time}>
                               🕒 {h.time}, 💬 {h.msg}
                             </h4>
-                            <button
+                            {/* <button
                               style={{
                                 alignSelf: "flex-end",
                                 background: "none",
@@ -434,7 +446,7 @@ const Dashboard = (props) => {
                               }}
                             >
                               👎
-                            </button>
+                            </button> */}
                           </div>
                         ))}
                       </p>
@@ -457,7 +469,7 @@ const Dashboard = (props) => {
                             <h4 key={h.time}>
                               🕒 {h.time}, 💬 {h.msg}
                             </h4>
-                            <button
+                            {/* <button
                               style={{
                                 alignSelf: "flex-end",
                                 background: "none",
@@ -474,7 +486,7 @@ const Dashboard = (props) => {
                               }}
                             >
                               👎
-                            </button>
+                            </button> */}
                           </div>
                         ))}
                       </p>

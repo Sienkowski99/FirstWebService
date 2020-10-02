@@ -529,6 +529,10 @@ app.post("/checkuser", (req, res) => {
     });
 });
 
+app.post("/removeDate", (req, res) => {
+  console.log(req.body);
+  // dates.find({ "months.$.name": req.body.month }).then((x) => console.log(x));
+});
 app.listen(8000, () => {
   console.log("App listening on port http://localhost:8000");
 });
