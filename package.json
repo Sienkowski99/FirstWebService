@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "js-cookie": "^2.2.1",
-    "nodemailer": "^6.4.11",
+    "nodemailer": "^6.4.16",
     "uuidv4": "^6.2.3"
   }
 }
